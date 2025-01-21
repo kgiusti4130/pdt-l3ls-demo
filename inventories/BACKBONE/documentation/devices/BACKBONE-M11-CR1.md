@@ -680,9 +680,9 @@ interface defaults
 | Ethernet1/1 | P2P_BACKBONE-M11-BL1_Ethernet49/1 | - | 10.252.1.0/31 | default | 9214 | False | - | - |
 | Ethernet2/1 | P2P_BACKBONE-M12-BL1_Ethernet49/1 | - | 10.252.1.4/31 | default | 9214 | False | - | - |
 | Ethernet27/1 | P2P_BACKBONE-M11-AR1_Ethernet49/1 | - | 10.252.0.64/31 | default | 9214 | False | - | - |
-| Ethernet28/1 | P2P_BACKBONE-M12-AR1_Ethernet49/1 | - | 10.252.0.68/31 | default | 9214 | True | - | - |
+| Ethernet28/1 | P2P_BACKBONE-M12-AR1_Ethernet49/1 | - | 10.252.0.68/31 | default | 9214 | False | - | - |
 | Ethernet29/1 | P2P_BACKBONE-M13-AR1_Ethernet49/1 | - | 10.252.0.72/31 | default | 9214 | False | - | - |
-| Ethernet30/1 | P2P_BACKBONE-M14-AR1_Ethernet49/1 | - | 10.252.0.76/31 | default | 9214 | True | - | - |
+| Ethernet30/1 | P2P_BACKBONE-M14-AR1_Ethernet49/1 | - | 10.252.0.76/31 | default | 9214 | False | - | - |
 
 #### Ethernet Interfaces Device Configuration
 
@@ -714,7 +714,7 @@ interface Ethernet27/1
 !
 interface Ethernet28/1
    description P2P_BACKBONE-M12-AR1_Ethernet49/1
-   shutdown
+   no shutdown
    mtu 9214
    no switchport
    ip address 10.252.0.68/31
@@ -730,7 +730,7 @@ interface Ethernet29/1
 !
 interface Ethernet30/1
    description P2P_BACKBONE-M14-AR1_Ethernet49/1
-   shutdown
+   no shutdown
    mtu 9214
    no switchport
    ip address 10.252.0.76/31
@@ -883,9 +883,9 @@ ASN Notation: asdot
 | 10.252.0.21 | 65000.2 | default | - | Inherited from peer group EVPN-OVERLAY-PEERS | Inherited from peer group EVPN-OVERLAY-PEERS | - | Inherited from peer group EVPN-OVERLAY-PEERS | - | - | - | - |
 | 10.252.0.22 | 65000.2 | default | - | Inherited from peer group EVPN-OVERLAY-PEERS | Inherited from peer group EVPN-OVERLAY-PEERS | - | Inherited from peer group EVPN-OVERLAY-PEERS | - | - | - | - |
 | 10.252.0.65 | 65000.11 | default | - | Inherited from peer group IPv4-UNDERLAY-PEERS | Inherited from peer group IPv4-UNDERLAY-PEERS | - | - | - | - | - | - |
-| 10.252.0.69 | 65000.21 | default | True | Inherited from peer group IPv4-UNDERLAY-PEERS | Inherited from peer group IPv4-UNDERLAY-PEERS | - | - | - | - | - | - |
+| 10.252.0.69 | 65000.21 | default | - | Inherited from peer group IPv4-UNDERLAY-PEERS | Inherited from peer group IPv4-UNDERLAY-PEERS | - | - | - | - | - | - |
 | 10.252.0.73 | 65000.22 | default | - | Inherited from peer group IPv4-UNDERLAY-PEERS | Inherited from peer group IPv4-UNDERLAY-PEERS | - | - | - | - | - | - |
-| 10.252.0.77 | 65000.12 | default | True | Inherited from peer group IPv4-UNDERLAY-PEERS | Inherited from peer group IPv4-UNDERLAY-PEERS | - | - | - | - | - | - |
+| 10.252.0.77 | 65000.12 | default | - | Inherited from peer group IPv4-UNDERLAY-PEERS | Inherited from peer group IPv4-UNDERLAY-PEERS | - | - | - | - | - | - |
 | 10.252.1.1 | 65000.2 | default | - | Inherited from peer group IPv4-UNDERLAY-PEERS | Inherited from peer group IPv4-UNDERLAY-PEERS | - | - | - | - | - | - |
 | 10.252.1.5 | 65000.2 | default | - | Inherited from peer group IPv4-UNDERLAY-PEERS | Inherited from peer group IPv4-UNDERLAY-PEERS | - | - | - | - | - | - |
 | 10.252.8.67 | 65000.998 | default | - | Inherited from peer group EVPN-OVERLAY-PEERS | Inherited from peer group EVPN-OVERLAY-PEERS | - | Inherited from peer group EVPN-OVERLAY-PEERS | - | - | - | - |
@@ -934,14 +934,12 @@ router bgp 65000.1
    neighbor 10.252.0.65 description BACKBONE-M11-AR1_Ethernet49/1
    neighbor 10.252.0.69 peer group IPv4-UNDERLAY-PEERS
    neighbor 10.252.0.69 remote-as 65000.21
-   neighbor 10.252.0.69 shutdown
    neighbor 10.252.0.69 description BACKBONE-M12-AR1_Ethernet49/1
    neighbor 10.252.0.73 peer group IPv4-UNDERLAY-PEERS
    neighbor 10.252.0.73 remote-as 65000.22
    neighbor 10.252.0.73 description BACKBONE-M13-AR1_Ethernet49/1
    neighbor 10.252.0.77 peer group IPv4-UNDERLAY-PEERS
    neighbor 10.252.0.77 remote-as 65000.12
-   neighbor 10.252.0.77 shutdown
    neighbor 10.252.0.77 description BACKBONE-M14-AR1_Ethernet49/1
    neighbor 10.252.1.1 peer group IPv4-UNDERLAY-PEERS
    neighbor 10.252.1.1 remote-as 65000.2

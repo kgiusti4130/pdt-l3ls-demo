@@ -1,5 +1,5 @@
 hostname: BACKBONE-M14-AR1
-is_deployed: false
+is_deployed: true
 router_bgp:
   as: '65000.12'
   router_id: 10.252.0.12

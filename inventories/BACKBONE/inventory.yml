@@ -16,13 +16,13 @@ BACKBONE:
               is_deployed: true
               ansible_host: 172.16.1.21
             BACKBONE-M12-AR1:
-              is_deployed: false
+              is_deployed: true
               ansible_host: 172.16.1.22
             BACKBONE-M13-AR1:
               is_deployed: true
               ansible_host: 172.16.1.23
             BACKBONE-M14-AR1:
-              is_deployed: false
+              is_deployed: true
               ansible_host: 172.16.1.24
         BACKBONE_L3_LEAVES:
           hosts:

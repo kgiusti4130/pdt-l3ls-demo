@@ -20,11 +20,11 @@
 | BACKBONE | spine | BACKBONE-M11-AR1 | 172.16.1.21/24 | cEOS-lab | Provisioned | - |
 | BACKBONE | l3leaf | BACKBONE-M11-BL1 | 172.16.1.31/24 | cEOS-lab | Provisioned | - |
 | BACKBONE | super-spine | BACKBONE-M11-CR1 | 172.16.1.11/24 | cEOS-lab | Provisioned | - |
-| BACKBONE | spine | BACKBONE-M12-AR1 | 172.16.1.22/24 | cEOS-lab | Not Available | - |
+| BACKBONE | spine | BACKBONE-M12-AR1 | 172.16.1.22/24 | cEOS-lab | Provisioned | - |
 | BACKBONE | l3leaf | BACKBONE-M12-BL1 | 172.16.1.32/24 | cEOS-lab | Provisioned | - |
 | BACKBONE | super-spine | BACKBONE-M12-CR1 | 172.16.1.12/24 | cEOS-lab | Provisioned | - |
 | BACKBONE | spine | BACKBONE-M13-AR1 | 172.16.1.23/24 | cEOS-lab | Provisioned | - |
-| BACKBONE | spine | BACKBONE-M14-AR1 | 172.16.1.24/24 | cEOS-lab | Not Available | - |
+| BACKBONE | spine | BACKBONE-M14-AR1 | 172.16.1.24/24 | cEOS-lab | Provisioned | - |
 
 > Provision status is based on Ansible inventory declaration and do not represent real status from CloudVision.
 

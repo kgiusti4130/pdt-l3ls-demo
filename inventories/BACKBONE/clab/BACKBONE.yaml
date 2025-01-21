@@ -139,15 +139,6 @@ topology:
     #   mgmt-ipv4: 172.16.1.64
 
 #############################################
-#                   MISC                    #
-#############################################
-
-    TEST-CORE-RTR-1:
-      kind: ceos
-      startup-config: TEST-CORE-RTR-1.cfg
-      mgmt-ipv4: 172.16.1.148
-
-#############################################
 #                   Hosts                   #
 #############################################
     host1:
@@ -252,9 +243,3 @@ topology:
    #host5 connections:
     - endpoints: ["ENGINEERING-TX1-ES1:eth13", "host5:eth1"]
     - endpoints: ["ENGINEERING-TX1-ES2:eth13", "host5:eth2"]
-
-  #TEST-CORE-RTR-1 connections
-    - endpoints: ["TEST-CORE-RTR-1:eth45", "BACKBONE-M11-BL1:eth47"]
-    - endpoints: ["TEST-CORE-RTR-1:eth46", "BACKBONE-M11-BL1:eth48"]
-    - endpoints: ["TEST-CORE-RTR-1:eth47", "BACKBONE-M12-BL1:eth47"]
-    - endpoints: ["TEST-CORE-RTR-1:eth48", "BACKBONE-M12-BL1:eth48"]
