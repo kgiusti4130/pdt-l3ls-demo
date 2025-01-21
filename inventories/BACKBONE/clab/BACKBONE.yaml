@@ -1,0 +1,260 @@
+name: cicd1
+prefix: ""
+
+mgmt:
+  network: statics
+  ipv4-subnet: 172.16.1.0/24
+
+topology:
+  kinds:
+    ceos:
+      image: ceos:4.31.3M
+      env:
+        CLAB_MGMT_VRF: MGMT
+
+#  defaults:
+#    env:
+#      INTFTYPE: et #Setting this environment variable to 'et' is required to support ISIS/OSPF on cEOS
+
+  nodes:
+
+#############################################
+#                super spines               #
+#############################################
+    BACKBONE-M11-CR1:
+      kind: ceos
+      startup-config: ../intended/configs/BACKBONE-M11-CR1.cfg
+      mgmt-ipv4: 172.16.1.11
+
+    BACKBONE-M12-CR1:
+      kind: ceos
+      startup-config: ../intended/configs/BACKBONE-M12-CR1.cfg
+      mgmt-ipv4: 172.16.1.12
+
+#############################################
+#                spines                     #
+#############################################
+    BACKBONE-M11-AR1:
+      kind: ceos
+      startup-config: ../intended/configs/BACKBONE-M11-AR1.cfg
+      mgmt-ipv4: 172.16.1.21
+
+    BACKBONE-M12-AR1:
+      kind: ceos
+      startup-config: ../intended/configs/BACKBONE-M12-AR1.cfg
+      mgmt-ipv4: 172.16.1.22
+
+    BACKBONE-M13-AR1:
+      kind: ceos
+      startup-config: ../intended/configs/BACKBONE-M13-AR1.cfg
+      mgmt-ipv4: 172.16.1.23
+
+    BACKBONE-M14-AR1:
+      kind: ceos
+      startup-config: ../intended/configs/BACKBONE-M14-AR1.cfg
+      mgmt-ipv4: 172.16.1.24
+
+#############################################
+#                Borderleafs                #
+#############################################
+    BACKBONE-M11-BL1:
+      kind: ceos
+      startup-config: ../intended/configs/BACKBONE-M11-BL1.cfg
+      mgmt-ipv4: 172.16.1.31
+
+    BACKBONE-M12-BL1:
+      kind: ceos
+      startup-config: ../intended/configs/BACKBONE-M12-BL1.cfg
+      mgmt-ipv4: 172.16.1.32
+
+#############################################
+#        ENGINEERING building switches      #
+#############################################
+    ENGINEERING-BDF-DS1:
+      kind: ceos
+      startup-config: ../../ENGINEERING/intended/configs/ENGINEERING-BDF-DS1.cfg
+      mgmt-ipv4: 172.16.1.40
+
+    ENGINEERING-BDF-DS2:
+      kind: ceos
+      startup-config: ../../ENGINEERING/intended/configs/ENGINEERING-BDF-DS2.cfg
+      mgmt-ipv4: 172.16.1.41
+
+    ENGINEERING-TX1-ES1:
+      kind: ceos
+      startup-config: ../../ENGINEERING/intended/configs/ENGINEERING-TX1-ES1.cfg
+      mgmt-ipv4: 172.16.1.42
+
+    ENGINEERING-TX1-ES2:
+      kind: ceos
+      startup-config: ../../ENGINEERING/intended/configs/ENGINEERING-TX1-ES2.cfg
+      mgmt-ipv4: 172.16.1.43
+
+#############################################
+#          FINANCE building switches        #
+#############################################
+
+    # FINANCE-BDF-DS1:
+    #   kind: ceos
+    #   startup-config: ../../FINANCE/intended/configs/FINANCE-BDF-DS1.cfg
+    #   mgmt-ipv4: 172.16.1.51
+
+    # FINANCE-BDF-DS2:
+    #   kind: ceos
+    #   startup-config: ../../FINANCE/intended/configs/FINANCE-BDF-DS2.cfg
+    #   mgmt-ipv4: 172.16.1.52
+
+    # FINANCE-TX1-ES1:
+    #   kind: ceos
+    #   startup-config: ../../FINANCE/intended/configs/FINANCE-TX1-ES1.cfg
+    #   mgmt-ipv4: 172.16.1.53
+
+    # FINANCE-TX1-ES2:
+    #   kind: ceos
+    #   startup-config: ../../FINANCE/intended/configs/FINANCE-TX1-ES2.cfg
+    #   mgmt-ipv4: 172.16.1.54
+
+#############################################
+#        MARKETING building switches        #
+#############################################
+
+    # MARKETING-BDF-DS1:
+    #   kind: ceos
+    #   startup-config: ../../MARKETING/intended/configs/MARKETING-BDF-DS1.cfg
+    #   mgmt-ipv4: 172.16.1.61
+
+    # MARKETING-BDF-DS2:
+    #   kind: ceos
+    #   startup-config: ../../MARKETING/intended/configs/MARKETING-BDF-DS2.cfg
+    #   mgmt-ipv4: 172.16.1.62
+
+    # MARKETING-TX1-ES1:
+    #   kind: ceos
+    #   startup-config: ../../MARKETING/intended/configs/MARKETING-TX1-ES1.cfg
+    #   mgmt-ipv4: 172.16.1.63
+
+    # MARKETING-TX1-ES2:
+    #   kind: ceos
+    #   startup-config: ../../MARKETING/intended/configs/MARKETING-TX1-ES2.cfg
+    #   mgmt-ipv4: 172.16.1.64
+
+#############################################
+#                   MISC                    #
+#############################################
+
+    TEST-CORE-RTR-1:
+      kind: ceos
+      startup-config: TEST-CORE-RTR-1.cfg
+      mgmt-ipv4: 172.16.1.148
+
+#############################################
+#                   Hosts                   #
+#############################################
+    host1:
+      kind: linux
+      image: mitchv85/ohv-host
+      mgmt-ipv4: 172.16.1.51
+      ports:
+        - '22201:22'
+      exec:
+        - bash /usr/local/bin/hostnetconfig.sh -b -i 10.10.22.101/24 -g 10.10.22.1 -m 10.10.22.0/24
+
+    host2:
+      kind: linux
+      image: mitchv85/ohv-host
+      mgmt-ipv4: 172.16.1.52
+      ports:
+        - '22202:22'
+      exec:
+        - bash /usr/local/bin/hostnetconfig.sh -b -i 10.10.222.102/24 -g 10.10.222.1 -m 10.10.222.0/24
+
+    host3:
+      kind: linux
+      image: mitchv85/ohv-host
+      mgmt-ipv4: 172.16.1.53
+      ports:
+        - '22203:22'
+      exec:
+        - bash /usr/local/bin/hostnetconfig.sh -b -i 10.10.22.103/24 -g 10.10.22.1 -m 10.10.22.0/24
+
+    host4:
+      kind: linux
+      image: mitchv85/ohv-host
+      mgmt-ipv4: 172.16.1.54
+      ports:
+        - '22204:22'
+      exec:
+        - bash /usr/local/bin/hostnetconfig.sh -b -i 10.10.22.104/24 -g 10.10.22.1 -m 10.10.22.0/24
+
+    host5:
+      kind: linux
+      image: mitchv85/ohv-host
+      mgmt-ipv4: 172.16.1.55
+      ports:
+        - '22205:22'
+      exec:
+        - bash /usr/local/bin/hostnetconfig.sh -b -i 10.10.222.105/24 -g 10.10.222.1 -m 10.10.222.0/24
+
+  links:
+#############################################
+#                   Links                   #
+#############################################
+    # Borderleaf Peer Links
+    - endpoints: ["BACKBONE-M11-BL1:eth55_1", "BACKBONE-M12-BL1:eth55_1"]
+    - endpoints: ["BACKBONE-M11-BL1:eth56_1", "BACKBONE-M12-BL1:eth56_1"]
+
+    # super spine BACKBONE-M11-CR1
+    - endpoints: ["BACKBONE-M11-CR1:eth1_1", "BACKBONE-M11-BL1:eth49_1"]
+    - endpoints: ["BACKBONE-M11-CR1:eth2_1", "BACKBONE-M12-BL1:eth49_1"]
+    - endpoints: ["BACKBONE-M11-CR1:eth27_1", "BACKBONE-M11-AR1:eth49_1"]
+    - endpoints: ["BACKBONE-M11-CR1:eth28_1", "BACKBONE-M12-AR1:eth49_1"]
+    - endpoints: ["BACKBONE-M11-CR1:eth29_1", "BACKBONE-M13-AR1:eth49_1"]
+    - endpoints: ["BACKBONE-M11-CR1:eth30_1", "BACKBONE-M14-AR1:eth49_1"]
+
+    # super spine BACKBONE-M12-CR1
+    - endpoints: ["BACKBONE-M12-CR1:eth1_1", "BACKBONE-M11-BL1:eth50_1"]
+    - endpoints: ["BACKBONE-M12-CR1:eth2_1", "BACKBONE-M12-BL1:eth50_1"]
+    - endpoints: ["BACKBONE-M12-CR1:eth27_1", "BACKBONE-M11-AR1:eth50_1"]
+    - endpoints: ["BACKBONE-M12-CR1:eth28_1", "BACKBONE-M12-AR1:eth50_1"]
+    - endpoints: ["BACKBONE-M12-CR1:eth29_1", "BACKBONE-M13-AR1:eth50_1"]
+    - endpoints: ["BACKBONE-M12-CR1:eth30_1", "BACKBONE-M14-AR1:eth50_1"]
+
+    # spine to building:
+    - endpoints: ["BACKBONE-M11-AR1:eth1", "ENGINEERING-BDF-DS1:eth48"]
+    - endpoints: ["BACKBONE-M12-AR1:eth1", "ENGINEERING-BDF-DS2:eth48"]
+
+    # L3 to L2 leaf connections:
+    - endpoints: ["ENGINEERING-BDF-DS1:eth1", "ENGINEERING-TX1-ES1:eth49"]
+    - endpoints: ["ENGINEERING-BDF-DS1:eth2", "ENGINEERING-TX1-ES2:eth49"]
+    - endpoints: ["ENGINEERING-BDF-DS2:eth1", "ENGINEERING-TX1-ES1:eth50"]
+    - endpoints: ["ENGINEERING-BDF-DS2:eth2", "ENGINEERING-TX1-ES2:eth50"]
+
+    # ENGINEERING L3 leaf MLAG Peerlinks:
+    - endpoints: ["ENGINEERING-BDF-DS1:eth55_1", "ENGINEERING-BDF-DS2:eth55_1"]
+    - endpoints: ["ENGINEERING-BDF-DS1:eth56_1", "ENGINEERING-BDF-DS2:eth56_1"]
+
+   #host1 connections:
+    - endpoints: ["BACKBONE-M11-BL1:eth10", "host1:eth1"]
+    - endpoints: ["BACKBONE-M12-BL1:eth10", "host1:eth2"]
+
+   #host2 connections:
+    - endpoints: ["BACKBONE-M11-BL1:eth11", "host2:eth1"]
+    - endpoints: ["BACKBONE-M12-BL1:eth11", "host2:eth2"]
+
+   #host3 connections:
+    - endpoints: ["ENGINEERING-TX1-ES1:eth11", "host3:eth1"]
+    - endpoints: ["ENGINEERING-TX1-ES2:eth11", "host3:eth2"]
+
+   #host4 connections:
+    - endpoints: ["ENGINEERING-TX1-ES1:eth12", "host4:eth1"]
+    - endpoints: ["ENGINEERING-TX1-ES2:eth12", "host4:eth2"]
+
+   #host5 connections:
+    - endpoints: ["ENGINEERING-TX1-ES1:eth13", "host5:eth1"]
+    - endpoints: ["ENGINEERING-TX1-ES2:eth13", "host5:eth2"]
+
+  #TEST-CORE-RTR-1 connections
+    - endpoints: ["TEST-CORE-RTR-1:eth45", "BACKBONE-M11-BL1:eth47"]
+    - endpoints: ["TEST-CORE-RTR-1:eth46", "BACKBONE-M11-BL1:eth48"]
+    - endpoints: ["TEST-CORE-RTR-1:eth47", "BACKBONE-M12-BL1:eth47"]
+    - endpoints: ["TEST-CORE-RTR-1:eth48", "BACKBONE-M12-BL1:eth48"]
