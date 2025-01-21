@@ -1,0 +1,60 @@
+anta_inventory:
+
+# ANTA inventory for {{ item.site_abbreviation }}
+##################################################
+#       {{ item.site_abbreviation }}
+##################################################
+
+  hosts:
+
+#########################################
+#            L3_LEAFs / VTEPs           #
+#########################################
+  - host: 10.44.10.120
+    name: {{ item.site_abbreviation }}-MDF-DS1
+    tags: ['{{ item.site_abbreviation }}-MDF-DS1', 'l3_leafs', 'mlag', '{{ item.site_abbreviation }}', '{{ item.site_abbreviation }}-l3_leafs']
+#    disable_cache: true
+  - host: 10.44.10.121
+    name: {{ item.site_abbreviation }}-MDF-DS2
+    tags: ['{{ item.site_abbreviation }}-MDF-DS2', 'l3_leafs', 'mlag', '{{ item.site_abbreviation }}', '{{ item.site_abbreviation }}-l3_leafs']
+#    disable_cache: true
+
+#########################################
+#           MLAGed  L2_LEAFs            #
+#########################################
+#   - host: 10.44.10.30
+#     name: {{ item.site_abbreviation }}-I01-ES1
+#     tags: ['{{ item.site_abbreviation }}-I01-ES1', 'leafs', 'mlag', '{{ item.site_abbreviation }}', '{{ item.site_abbreviation }}-leafs']
+# #    disable_cache: true
+#   - host: 10.44.10.31
+#     name: {{ item.site_abbreviation }}-I01-ES2
+#     tags: ['{{ item.site_abbreviation }}-I01-ES2', 'leafs', 'mlag', '{{ item.site_abbreviation }}', '{{ item.site_abbreviation }}-leafs']
+# #    disable_cache: true
+#   - host: 10.44.10.30
+#     name: {{ item.site_abbreviation }}-I02-ES1
+#     tags: ['{{ item.site_abbreviation }}-I02-ES1', 'leafs', 'mlag', '{{ item.site_abbreviation }}', '{{ item.site_abbreviation }}-leafs']
+# #    disable_cache: true
+#   - host: 10.44.10.31
+#     name: {{ item.site_abbreviation }}-I02-ES2
+#     tags: ['{{ item.site_abbreviation }}-I02-ES2', 'leafs', 'mlag', '{{ item.site_abbreviation }}', '{{ item.site_abbreviation }}-leafs']
+# #    disable_cache: true
+
+#########################################
+#          non-MLAG L2_LEAFs            #
+#########################################
+  - host: 10.44.10.126
+    name: {{ item.site_abbreviation }}-TX1-ES3
+    tags: ['{{ item.site_abbreviation }}-I01-ES3', 'leafs', '{{ item.site_abbreviation }}', '{{ item.site_abbreviation }}-leafs']
+#    disable_cache: true
+  - host: 10.44.10.126
+    name: {{ item.site_abbreviation }}-TX1-ES4
+    tags: ['{{ item.site_abbreviation }}-I01-ES4', 'leafs', '{{ item.site_abbreviation }}', '{{ item.site_abbreviation }}-leafs']
+#    disable_cache: true
+  - host: 10.44.10.126
+    name: {{ item.site_abbreviation }}-TX2-ES3
+    tags: ['{{ item.site_abbreviation }}-I02-ES3', 'leafs', '{{ item.site_abbreviation }}', '{{ item.site_abbreviation }}-leafs']
+#    disable_cache: true
+  - host: 10.44.10.126
+    name: {{ item.site_abbreviation }}-TX2-ES4
+    tags: ['{{ item.site_abbreviation }}-I02-ES4', 'leafs', '{{ item.site_abbreviation }}', '{{ item.site_abbreviation }}-leafs']
+#    disable_cache: true

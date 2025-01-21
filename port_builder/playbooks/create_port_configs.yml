@@ -1,0 +1,25 @@
+---
+- name: Create Connected Endpoints file from CSV
+  gather_facts: false
+  hosts: localhost
+
+  tasks:
+
+    - name: "Reading in CSV file"
+      community.general.read_csv:
+        path: ../datafiles/switches.csv
+      register: switches
+
+    - name: Create ports directory if does not exist
+      ansible.builtin.file:
+        path: "{{ item }}"
+        state: directory
+        mode: '0755'
+      loop:
+        - "../ports/"
+
+    - name: Create ports config for the devices in the CSV file and write to GENERATED_CONNECTED_ENDPOINTS.yml
+      ansible.builtin.template:
+        mode: '0755'
+        src: ../templates/port_template.j2
+        dest: ../ports/GENERATED_CONNECTED_ENDPOINTS.yml

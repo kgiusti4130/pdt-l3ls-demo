@@ -1,0 +1,82 @@
+---
+
+- name: Playbook to disable TLS 1.0 & 1.1 and make sure 1.2 is enabled
+  hosts: BACKBONE_FABRIC
+  gather_facts: false
+  vars:
+    ssl_profile: DEMO_ssl
+    cert_days: 3650
+    correct_tls_string: "TLS Protocols:      1.2"
+    correct_tls_short: 1.2
+    ansible_user: kgiusti     # creds are stored here so that vault pass is not needed everytime running a build.
+    # ansible_password:
+    # ansible_password: test # The ansible_password will be vaulted or run as extra variable
+                           # creds are stored here so that vault pass is not needed everytime running a build.
+
+    # nitel vault
+    # ansible_password: !vault |
+    #           $ANSIBLE_VAULT;1.1;AES256
+    #           64666132656537376537616664393266383663373562636339313565353963303836633465366662
+    #           6461646631626335643231636532323938333730383365370a396162303331393263353866643332
+    #           32356161346534653361373733333137633965303632373266376138376663343637353939393964
+    #           3434383861386130310a633866313236343061353939623137656535356230643862366261663839
+    #           66393163333931646131666466343831656238333261323034643665393463323435
+
+    # kgiusti vault
+    # ansible_password: !vault |
+    #           $ANSIBLE_VAULT;1.1;AES256
+    #           35653632636237313061616233643162353535643965663363373162626632353637373233396464
+    #           6435373339353232653931636433303539383838306265350a313965313738373035396230333861
+    #           33393239353065316532383032613965363730646364613738373639623230336239333135333566
+    #           6365353566383033660a666635633430363038373664373766313763653230386366616534663666
+    #           64663731343264646164323636303335653462636434643734653631356163633763
+
+  tasks:
+
+    - name: Capture TLS settings
+      arista.eos.eos_command:
+        commands:
+          - "show management api http-commands | grep TLS"
+      register: tls_settings
+
+    - name: Bash command to generate cert
+      ansible.builtin.debug:
+        msg: "{{ tls_settings }}"
+
+    - name: Bash command to generate cert
+      when: 'correct_tls_string != tls_settings.stdout[0]'
+      arista.eos.eos_config:
+        lines:
+          - "bash timeout 5 sudo openssl req -new -nodes -x509 -days {{ cert_days }} -out /mnt/flash/ssl.crt -keyout /mnt/flash/ssl.key -subj /CN=self.signed"
+
+    - name: Copy certs to new location
+      when: 'correct_tls_string != tls_settings.stdout[0]'
+      arista.eos.eos_command:
+        commands:
+          - "copy flash:ssl.crt certificate:"
+          - "copy flash:ssl.key sslkey:"
+
+    - name: Pause for 30 seconds
+      # when: 'correct_tls_string != tls_settings.stdout[0]'
+      ansible.builtin.pause:
+        seconds: 30
+
+    - name: Create SSL Profile with proper settings
+      when: 'correct_tls_string != tls_settings.stdout[0]'
+      arista.eos.eos_config:
+        lines:
+          - tls versions {{ correct_tls_short }}
+          - certificate ssl.crt key ssl.key
+        parents:
+          - management security
+          - ssl profile {{ ssl_profile }}
+
+    - name: Apply proper settings to eEAPI
+      when: 'correct_tls_string != tls_settings.stdout[0]'
+      arista.eos.eos_config:
+        lines:
+          - protocol https ssl profile {{ ssl_profile }}
+          - no shutdown
+        parents:
+          - management api http-commands
+        save_when: always

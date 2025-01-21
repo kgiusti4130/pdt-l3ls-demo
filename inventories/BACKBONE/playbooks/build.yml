@@ -1,0 +1,19 @@
+---
+
+- name: Build AVD configs
+  hosts: BACKBONE_FABRIC
+  gather_facts: false
+  tasks:
+
+    # - name: Import Global Vars
+    #   ansible.builtin.include_vars: "{{ item }}"
+    #   with_items:
+    #     - "../../../global_vars/DEMO_GLOBAL_OVERRIDE.yml"
+
+    - name: Generate AVD Structured Configurations and Fabric Documentation
+      ansible.builtin.import_role:
+        name: arista.avd.eos_designs
+
+    - name: Generate Device Configurations and Documentation
+      ansible.builtin.import_role:
+        name: arista.avd.eos_cli_config_gen

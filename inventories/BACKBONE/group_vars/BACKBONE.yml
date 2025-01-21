@@ -1,0 +1,126 @@
+---
+#############################################
+#               Super Spines                #
+#############################################
+max_super_spines: 4
+super_spine:
+  defaults:
+    platform: cEOS-lab
+    bgp_as: "65000.1"
+    loopback_ipv4_pool: 10.252.0.0/29 #Loopback0 EVPN Overlay
+    loopback_ipv4_offset: 2 # Match number of super spine switches
+    evpn_gateway:
+      remote_peers: # There are not multiple EVPN domains, this simply modifies the EVPN-OVERLAY-PEERS peer-group.
+        - hostname: "ENGINEERING-BDF-DS1"
+          ip_address: 10.252.8.67 ## ENGINEERING-BDF-DS1 Lo0
+          bgp_as: "65000.998"
+        - hostname: "ENGINEERING-BDF-DS2"
+          ip_address: 10.252.8.68 ## ENGINEERING-BDF-DS2 Lo0
+          bgp_as: "65000.998"
+
+##################################################
+#    NOT IN CONTAINERLAB TO SAVE ON RESOURCES    #
+##################################################
+        # - hostname: "FINANCE-BDF-DS1"
+        #   ip_address: 10.252.9.67 ## "FINANCE-BDF-DS1 Lo0
+        #   bgp_as: "65000.999"
+        # - hostname: ""FINANCE-BDF-DS2"
+        #   ip_address: 10.252.9.68 ## "FINANCE-BDF-DS2 Lo0
+        #   bgp_as: "65000.999"
+        # - hostname: "MARKETING-BDF-DS1"
+        #   ip_address: 10.252.1.67 ## "MARKETING-BDF-DS1 Lo0
+        #   bgp_as: "65000.997"
+        # - hostname: ""MARKETING-BDF-DS2"
+        #   ip_address: 10.252.1.68 ## "MARKETING-BDF-DS2 Lo0
+        #   bgp_as: "65000.997"
+
+  nodes:
+    - name: BACKBONE-M11-CR1
+      id: 1
+      mgmt_ip: 172.16.1.11/24 # MGMT1
+
+    - name: BACKBONE-M12-CR1
+      id: 2
+      mgmt_ip: 172.16.1.12/24 # MGMT1
+
+#############################################
+#                 Spines                    #
+#############################################
+spine:
+  defaults:
+    platform: cEOS-lab # 7050CX3
+    loopback_ipv4_pool: 10.252.0.8/29 #Loopback0 EVPN Overlay
+    uplink_ipv4_pool: 10.252.0.64/26 # Uplinks to super spines
+    uplink_switches: ['BACKBONE-M11-CR1', 'BACKBONE-M12-CR1']
+  nodes:
+    - name: BACKBONE-M11-AR1
+      id: 1
+      bgp_as: "65000.11"
+      mgmt_ip: 172.16.1.21/24 # MGMT1
+      uplink_switch_interfaces:
+        - Ethernet27/1
+        - Ethernet27/1
+
+    - name: BACKBONE-M12-AR1
+      id: 2
+      bgp_as: "65000.21"
+      mgmt_ip: 172.16.1.22/24 # MGMT1
+      uplink_switch_interfaces:
+        - Ethernet28/1
+        - Ethernet28/1
+
+    - name: BACKBONE-M13-AR1
+      id: 3
+      bgp_as: "65000.22"
+      mgmt_ip: 172.16.1.23/24 # MGMT1
+      uplink_switch_interfaces:
+        - Ethernet29/1
+        - Ethernet29/1
+
+    - name: BACKBONE-M14-AR1
+      id: 4
+      bgp_as: "65000.12"
+      mgmt_ip: 172.16.1.24/24 # MGMT1
+      uplink_switch_interfaces:
+        - Ethernet30/1
+        - Ethernet30/1
+
+#############################################
+#                 L3 Leafs                  #
+#############################################
+l3leaf:
+  defaults:
+    platform: cEOS-lab
+    loopback_ipv4_pool: 10.252.0.16/28 # Loopback0 EVPN Overlay
+    loopback_ipv4_offset: 4 # Match number of spine switches
+    vtep_loopback_ipv4_pool: 10.252.0.32/29 # Loopback1 VTEP tunnel source
+    uplink_switches: ['BACKBONE-M11-CR1', 'BACKBONE-M12-CR1']
+    uplink_interfaces: [ 'Ethernet49/1', 'Ethernet50/1' ]
+    uplink_ipv4_pool: 10.252.1.0/24 # Pool for connecting to super spines
+    mlag_peer_ipv4_pool: 10.252.2.0/31 # MLAG peer link vlan 4094
+    mlag_peer_l3_ipv4_pool: 10.252.2.2/31 # MLAG L3 for each VRF
+    virtual_router_mac_address: aa:aa:bb:bb:cc:cc
+    spanning_tree_mode: rapid-pvst
+    spanning_tree_priority: 40960 # 32768
+
+  node_groups:
+    - group: BACKBONE-BL-GROUP
+      bgp_as: "65000.2"
+      filter:
+        tags: [VLAN_MAPPING, ALL_SWITCHES, ENGINEERING, IOT]
+        tenants: [TENANT1]
+
+      nodes:
+        - name: BACKBONE-M11-BL1
+          id: 1
+          mgmt_ip: 172.16.1.31/24
+          uplink_switch_interfaces:
+            - Ethernet1/1
+            - Ethernet1/1
+
+        - name: BACKBONE-M12-BL1
+          id: 2
+          mgmt_ip: 172.16.1.32/24
+          uplink_switch_interfaces:
+            - Ethernet2/1
+            - Ethernet2/1

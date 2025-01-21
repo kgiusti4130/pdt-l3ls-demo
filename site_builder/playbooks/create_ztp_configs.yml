@@ -1,0 +1,31 @@
+---
+- name: Create configlets from CSV data
+  gather_facts: false
+  hosts: localhost
+
+  tasks:
+
+    - name: Register variables
+      ansible.builtin.include_vars:
+        file: "../vars/baseline.yaml"
+        name: baseline
+
+    - name: "Reading in CSV file"
+      community.general.read_csv:
+        path: ../datafiles/devices.csv
+      register: switches
+
+    - name: Creates ZTP-configs directory if does not exist
+      ansible.builtin.file:
+        path: "{{ item }}"
+        state: directory
+        mode: '0755'
+      loop:
+        - "../ztp_configs/"
+
+    - name: Gernerate ZTP file
+      ansible.builtin.template: src=../templates/ztp_template.j2 dest=../ztp_configs/{{ switch.hostname }}.ztp
+      loop: "{{ switches.list }}"
+      loop_control:
+        loop_var: switch
+      when: switch.os == 'eos'

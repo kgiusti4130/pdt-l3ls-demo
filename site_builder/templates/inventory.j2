@@ -1,0 +1,29 @@
+---
+# Inventory for {{ item.site_abbreviation }} Fabric
+{{ item.site_abbreviation  }}:
+  children:
+    {{ item.site_abbreviation  }}_FABRIC:
+      children:
+        {{ item.site_abbreviation  }}_L3_LEAVES:
+          hosts:
+            {{ item.site_abbreviation  }}-BDF-DS1:
+            {{ item.site_abbreviation  }}-BDF-DS2:
+        {{ item.site_abbreviation  }}_L2_LEAVES:
+          hosts:
+            {{ item.site_abbreviation  }}-TX1-ES1:
+            {{ item.site_abbreviation  }}-TX1-ES2:
+#            {{ item.site_abbreviation  }}-TX1-ES3:
+#            {{ item.site_abbreviation  }}-TX1-ES4:
+#            {{ item.site_abbreviation  }}-TX2-ES1:
+#            {{ item.site_abbreviation  }}-TX2-ES2:
+#            {{ item.site_abbreviation  }}-TX2-ES3:
+#            {{ item.site_abbreviation  }}-TX2-ES4:
+
+    {{ item.site_abbreviation  }}_NETWORK_SERVICES:
+      children:
+        {{ item.site_abbreviation  }}_L3_LEAVES:
+        {{ item.site_abbreviation  }}_L2_LEAVES:
+    {{ item.site_abbreviation  }}_CONNECTED_ENDPOINTS:
+      children:
+        {{ item.site_abbreviation  }}_L3_LEAVES:
+        {{ item.site_abbreviation  }}_L2_LEAVES:

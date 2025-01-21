@@ -1,0 +1,7 @@
+---
+# L2 leaf config for FINANCE
+type: l2leaf
+
+#############################################
+#    Config logic for global & local ACLs   #
+#############################################

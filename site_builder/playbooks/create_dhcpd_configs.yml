@@ -1,0 +1,27 @@
+---
+- name: Create configlets from CSV data
+  gather_facts: false
+  hosts: localhost
+
+  tasks:
+
+    - name: Register variables
+      ansible.builtin.include_vars:
+        file: "../vars/baseline.yaml"
+        name: baseline
+
+    - name: "Reading in CSV file"
+      community.general.read_csv:
+        path: ../datafiles/devices.csv
+      register: switches
+
+    - name: Creates dhcpd-configs directory if does not exist
+      ansible.builtin.file:
+        path: "{{ item }}"
+        state: directory
+        mode: '0755'
+      loop:
+        - "../dhcpd-config/"
+
+    - name: Create DHCPD Config for the devices in the CSV file and write to dhcpd-config.cfg
+      ansible.builtin.template: src=../templates/dhcpd_template.j2 dest=../dhcpd-config/dhcpd-config.cfg

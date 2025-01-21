@@ -1,0 +1,60 @@
+anta_inventory:
+
+# ANTA inventory for ENGINEERING
+##################################################
+#       ENGINEERING
+##################################################
+
+  hosts:
+
+#########################################
+#            L3_LEAFs / VTEPs           #
+#########################################
+  - host: 10.44.10.120
+    name: ENGINEERING-MDF-DS1
+    tags: ['ENGINEERING-MDF-DS1', 'l3_leafs', 'mlag', 'ENGINEERING', 'ENGINEERING-l3_leafs']
+#    disable_cache: true
+  - host: 10.44.10.121
+    name: ENGINEERING-MDF-DS2
+    tags: ['ENGINEERING-MDF-DS2', 'l3_leafs', 'mlag', 'ENGINEERING', 'ENGINEERING-l3_leafs']
+#    disable_cache: true
+
+#########################################
+#           MLAGed  L2_LEAFs            #
+#########################################
+#   - host: 10.44.10.30
+#     name: ENGINEERING-I01-ES1
+#     tags: ['ENGINEERING-I01-ES1', 'leafs', 'mlag', 'ENGINEERING', 'ENGINEERING-leafs']
+# #    disable_cache: true
+#   - host: 10.44.10.31
+#     name: ENGINEERING-I01-ES2
+#     tags: ['ENGINEERING-I01-ES2', 'leafs', 'mlag', 'ENGINEERING', 'ENGINEERING-leafs']
+# #    disable_cache: true
+#   - host: 10.44.10.30
+#     name: ENGINEERING-I02-ES1
+#     tags: ['ENGINEERING-I02-ES1', 'leafs', 'mlag', 'ENGINEERING', 'ENGINEERING-leafs']
+# #    disable_cache: true
+#   - host: 10.44.10.31
+#     name: ENGINEERING-I02-ES2
+#     tags: ['ENGINEERING-I02-ES2', 'leafs', 'mlag', 'ENGINEERING', 'ENGINEERING-leafs']
+# #    disable_cache: true
+
+#########################################
+#          non-MLAG L2_LEAFs            #
+#########################################
+  - host: 10.44.10.126
+    name: ENGINEERING-TX1-ES3
+    tags: ['ENGINEERING-I01-ES3', 'leafs', 'ENGINEERING', 'ENGINEERING-leafs']
+#    disable_cache: true
+  - host: 10.44.10.126
+    name: ENGINEERING-TX1-ES4
+    tags: ['ENGINEERING-I01-ES4', 'leafs', 'ENGINEERING', 'ENGINEERING-leafs']
+#    disable_cache: true
+  - host: 10.44.10.126
+    name: ENGINEERING-TX2-ES3
+    tags: ['ENGINEERING-I02-ES3', 'leafs', 'ENGINEERING', 'ENGINEERING-leafs']
+#    disable_cache: true
+  - host: 10.44.10.126
+    name: ENGINEERING-TX2-ES4
+    tags: ['ENGINEERING-I02-ES4', 'leafs', 'ENGINEERING', 'ENGINEERING-leafs']
+#    disable_cache: true

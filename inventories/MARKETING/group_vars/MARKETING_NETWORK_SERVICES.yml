@@ -1,0 +1,9 @@
+---
+
+# Tenant info is stored in DEMO_GLOBAL.yml unless it needs to be overriden here.
+# Network Services for MARKETING
+
+# tenants:
+# ##############################################
+# #               TenantXYZ                    #
+# ##############################################

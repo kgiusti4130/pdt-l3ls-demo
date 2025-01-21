@@ -1,0 +1,35 @@
+---
+cvp_devices:
+  - fqdn: BACKBONE-M11-AR1
+    parentContainerName: BACKBONE_SPINES
+    configlets:
+      - BACKBONE_BACKBONE-M11-AR1
+  - fqdn: BACKBONE-M11-BL1
+    parentContainerName: BACKBONE_L3_LEAVES
+    configlets:
+      - BACKBONE_BACKBONE-M11-BL1
+  - fqdn: BACKBONE-M11-CR1
+    parentContainerName: BACKBONE_SUPER_SPINES
+    configlets:
+      - BACKBONE_BACKBONE-M11-CR1
+  - fqdn: BACKBONE-M12-BL1
+    parentContainerName: BACKBONE_L3_LEAVES
+    configlets:
+      - BACKBONE_BACKBONE-M12-BL1
+  - fqdn: BACKBONE-M12-CR1
+    parentContainerName: BACKBONE_SUPER_SPINES
+    configlets:
+      - BACKBONE_BACKBONE-M12-CR1
+  - fqdn: BACKBONE-M13-AR1
+    parentContainerName: BACKBONE_SPINES
+    configlets:
+      - BACKBONE_BACKBONE-M13-AR1
+cvp_containers:
+  BACKBONE_FABRIC:
+    parentContainerName: Tenant
+  BACKBONE_L3_LEAVES:
+    parentContainerName: BACKBONE_FABRIC
+  BACKBONE_SPINES:
+    parentContainerName: BACKBONE_FABRIC
+  BACKBONE_SUPER_SPINES:
+    parentContainerName: BACKBONE_FABRIC

@@ -1,0 +1,9 @@
+---
+type: super-spine
+
+switchport_default:
+  mode: "routed"
+
+#############################################
+#    Config logic for global & local ACLs   #
+#############################################

@@ -1,0 +1,60 @@
+anta_inventory:
+
+# ANTA inventory for MARKETING
+##################################################
+#       MARKETING
+##################################################
+
+  hosts:
+
+#########################################
+#            L3_LEAFs / VTEPs           #
+#########################################
+  - host: 10.44.10.120
+    name: MARKETING-MDF-DS1
+    tags: ['MARKETING-MDF-DS1', 'l3_leafs', 'mlag', 'MARKETING', 'MARKETING-l3_leafs']
+#    disable_cache: true
+  - host: 10.44.10.121
+    name: MARKETING-MDF-DS2
+    tags: ['MARKETING-MDF-DS2', 'l3_leafs', 'mlag', 'MARKETING', 'MARKETING-l3_leafs']
+#    disable_cache: true
+
+#########################################
+#           MLAGed  L2_LEAFs            #
+#########################################
+#   - host: 10.44.10.30
+#     name: MARKETING-I01-ES1
+#     tags: ['MARKETING-I01-ES1', 'leafs', 'mlag', 'MARKETING', 'MARKETING-leafs']
+# #    disable_cache: true
+#   - host: 10.44.10.31
+#     name: MARKETING-I01-ES2
+#     tags: ['MARKETING-I01-ES2', 'leafs', 'mlag', 'MARKETING', 'MARKETING-leafs']
+# #    disable_cache: true
+#   - host: 10.44.10.30
+#     name: MARKETING-I02-ES1
+#     tags: ['MARKETING-I02-ES1', 'leafs', 'mlag', 'MARKETING', 'MARKETING-leafs']
+# #    disable_cache: true
+#   - host: 10.44.10.31
+#     name: MARKETING-I02-ES2
+#     tags: ['MARKETING-I02-ES2', 'leafs', 'mlag', 'MARKETING', 'MARKETING-leafs']
+# #    disable_cache: true
+
+#########################################
+#          non-MLAG L2_LEAFs            #
+#########################################
+  - host: 10.44.10.126
+    name: MARKETING-TX1-ES3
+    tags: ['MARKETING-I01-ES3', 'leafs', 'MARKETING', 'MARKETING-leafs']
+#    disable_cache: true
+  - host: 10.44.10.126
+    name: MARKETING-TX1-ES4
+    tags: ['MARKETING-I01-ES4', 'leafs', 'MARKETING', 'MARKETING-leafs']
+#    disable_cache: true
+  - host: 10.44.10.126
+    name: MARKETING-TX2-ES3
+    tags: ['MARKETING-I02-ES3', 'leafs', 'MARKETING', 'MARKETING-leafs']
+#    disable_cache: true
+  - host: 10.44.10.126
+    name: MARKETING-TX2-ES4
+    tags: ['MARKETING-I02-ES4', 'leafs', 'MARKETING', 'MARKETING-leafs']
+#    disable_cache: true

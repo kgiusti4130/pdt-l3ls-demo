@@ -1,0 +1,29 @@
+---
+# Inventory for MARKETING Fabric
+MARKETING:
+  children:
+    MARKETING_FABRIC:
+      children:
+        MARKETING_L3_LEAVES:
+          hosts:
+            MARKETING-BDF-DS1:
+            MARKETING-BDF-DS2:
+        MARKETING_L2_LEAVES:
+          hosts:
+            MARKETING-TX1-ES1:
+            MARKETING-TX1-ES2:
+#            MARKETING-TX1-ES3:
+#            MARKETING-TX1-ES4:
+#            MARKETING-TX2-ES1:
+#            MARKETING-TX2-ES2:
+#            MARKETING-TX2-ES3:
+#            MARKETING-TX2-ES4:
+
+    MARKETING_NETWORK_SERVICES:
+      children:
+        MARKETING_L3_LEAVES:
+        MARKETING_L2_LEAVES:
+    MARKETING_CONNECTED_ENDPOINTS:
+      children:
+        MARKETING_L3_LEAVES:
+        MARKETING_L2_LEAVES:

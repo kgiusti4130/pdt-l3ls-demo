@@ -1,0 +1,964 @@
+---
+#############################################
+#        Structured Config settings         #
+#############################################
+custom_structured_configuration_prefix: [ custom_structured_configuration_, global_custom_structured_configuration_, specific_custom_structured_configuration_ ]
+custom_structured_configuration_list_merge: append
+
+ansible_connection: ansible.netcommon.httpapi
+ansible_network_os: arista.eos.eos
+ansible_become: true
+ansible_become_method: enable
+ansible_httpapi_use_ssl: true
+ansible_httpapi_validate_certs: false
+
+design:
+  type: l3ls-evpn
+
+underlay_routing_protocol: EBGP
+overlay_routing_protocol: EBGP
+
+avd_data_validation_mode: error
+
+fabric_ip_addressing:
+  mlag:
+    algorithm: same_subnet
+
+#############################################
+#          MAC and ARP timers               #
+#############################################
+# MAC address-table aging time, default is 300.
+mac_address_table:
+  aging_time: 1800
+
+# ARP cache timeout, default of 300
+arp:
+  aging:
+    timeout_default: 1500
+
+#############################################
+#          Multicast settings               #
+#############################################
+underlay_multicast: true
+igmp_snooping_enabled: true
+evpn_multicast: true
+
+l3_edge:
+  p2p_links_ip_pools:
+    - name: BUILDING_TO_BACKBONE_POOL
+      ipv4_pool: 10.252.4.0/23
+
+    - name: LEGACY_TO_BACKBONE_POOL
+      ipv4_pool: 10.252.6.0/27
+
+  p2p_links_profiles:
+    - name: BUILDING_TO_BACKBONE_PROFILE
+      ip_pool: BUILDING_TO_BACKBONE_POOL
+      include_in_underlay_protocol: true
+      underlay_multicast: true
+
+    - name: LEGACY_TO_BACKBONE_PROFILE
+      ip_pool: LEGACY_TO_BACKBONE_POOL
+      include_in_underlay_protocol: false
+      mtu: 1500
+      structured_config:
+        ospf_network_point_to_point: true
+        vrf: campus
+        pim:
+          ipv4:
+            sparse_mode: true
+        shutdown: false
+        eos_cli: ip igmp version 2
+
+#############################################
+#    BORDER LEAFS to DEMO LEGACY NETWORK    #
+#############################################
+  p2p_links:
+    - profile: LEGACY_TO_BACKBONE_PROFILE
+      id: 1
+      nodes: [ CORE-LEGACY, BACKBONE-M11-BL1 ]
+      interfaces: [ Te1/1/1, Ethernet47 ]
+
+    - profile: LEGACY_TO_BACKBONE_PROFILE
+      id: 2
+      nodes: [ CORE-LEGACY, BACKBONE-M11-BL1 ]
+      interfaces: [ Te2/1/1, Ethernet48 ]
+
+    - profile: LEGACY_TO_BACKBONE_PROFILE
+      id: 3
+      nodes: [ CORE-LEGACY, BACKBONE-M12-BL1 ]
+      interfaces: [ Te1/1/2, Ethernet47 ]
+
+    - profile: LEGACY_TO_BACKBONE_PROFILE
+      id: 4
+      nodes: [ CORE-LEGACY, BACKBONE-M12-BL1 ]
+      interfaces: [ Te2/1/2, Ethernet48 ]
+
+#############################################
+#           uplinks to Spines               #
+#############################################
+    - profile: BUILDING_TO_BACKBONE_PROFILE
+      id: 1
+      nodes: [ BACKBONE-M11-AR1, ENGINEERING-BDF-DS1 ]
+      interfaces: [ Ethernet1, Ethernet48 ]
+      as: ['65000.11', '65000.402']
+
+    - profile: BUILDING_TO_BACKBONE_PROFILE
+      id: 2
+      nodes: [ BACKBONE-M12-AR1, ENGINEERING-BDF-DS2 ]
+      interfaces: [ Ethernet1, Ethernet48 ]
+      as: ['65000.21', '65000.402']
+
+    - profile: BUILDING_TO_BACKBONE_PROFILE
+      id: 3
+      nodes: [ BACKBONE-M11-AR1, FINANCE-BDF-DS1 ]
+      interfaces: [ Ethernet2, Ethernet48 ]
+      as: ['65000.11', '65000.303']
+
+    - profile: BUILDING_TO_BACKBONE_PROFILE
+      id: 4
+      nodes: [ BACKBONE-M13-AR1, FINANCE-BDF-DS2 ]
+      interfaces: [ Ethernet2, Ethernet48 ]
+      as: ['65000.22', '65000.303']
+
+    - profile: BUILDING_TO_BACKBONE_PROFILE
+      id: 5
+      nodes: [ BACKBONE-M11-AR1, MARKETING-BDF-DS1 ]
+      interfaces: [ Ethernet3, Ethernet48 ]
+      as: ['65000.11', '65000.302']
+
+    - profile: BUILDING_TO_BACKBONE_PROFILE
+      id: 6
+      nodes: [ BACKBONE-M13-AR1, MARKETING-BDF-DS2 ]
+      interfaces: [ Ethernet3, Ethernet48 ]
+      as: ['65000.22', '65000.302']
+
+#############################################
+#        Default interface layout           #
+#############################################
+
+default_interfaces:
+  - types: [ super-spine ]
+    platforms: [ default ]
+
+  - types: [ spine ]
+    platforms: [ default ]
+    uplink_interfaces: [ 'Ethernet49/1','Ethernet50/1' ]
+
+  - types: [ l3leaf ]
+    platforms: [ default ]
+    uplink_interfaces: [ Ethernet49/1 ]
+    mlag_interfaces: ['Ethernet55/1', 'Ethernet56/1']
+
+  - types: [ l2leaf ]
+    platforms: [ default ]
+    uplink_interfaces: [ Ethernet49-50 ]
+    mlag_interfaces: ['Ethernet51', 'Ethernet52']
+
+# P2P interfaces MTU, includes VLANs 4093 and 4094 that are over peer-link
+# If you're running vEOS-lab or cEOS, you should use MTU of 1500 instead as shown in the following line
+# p2p_uplinks_mtu: 1500 #Set to this for ContainerLab testing, Change to 9214 on real hardware
+
+platform_settings:
+  - platforms:
+      - cEOS-lab
+    management_interface: Management0
+    default_interface_mtu: 1500
+    feature_support:
+      bgp_update_wait_install: false
+      bgp_update_wait_for_convergence: false
+    structured_config:
+      router_bgp:
+        as_notation: asdot
+        distance:
+          external_routes: 20
+          internal_routes: 200
+          local_routes: 200
+        graceful_restart:
+          enabled: true
+          restart_time: 300
+      vrfs:
+        - name: campus
+          ip_routing: true
+      loopback_interfaces:
+        - name: Loopback2
+          description: "SFLOW SOURCE"
+          shutdown: false
+          ip_address: 10.255.1.10/32
+      management_interfaces:
+        - name: Management0
+          lldp:
+            transmit: false
+            receive: false
+
+  - platforms:
+      - 7050CX3
+    management_interface: Management1
+    default_interface_mtu: 9214
+    structured_config:
+      router_bgp:
+        as_notation: asdot
+        distance:
+          external_routes: 20
+          internal_routes: 200
+          local_routes: 200
+        graceful_restart:
+          enabled: true
+          restart_time: 300
+      vrfs:
+        - name: campus
+          ip_routing: true
+      loopback_interfaces:
+        - name: Loopback2
+          description: "SFLOW SOURCE"
+          shutdown: false
+          ip_address: 10.255.1.10/32
+
+  - platforms:
+      - 7050SX3
+    management_interface: Management1
+    default_interface_mtu: 9214
+    structured_config:
+      router_bgp:
+        as_notation: asdot
+        distance:
+          external_routes: 20
+          internal_routes: 200
+          local_routes: 200
+        graceful_restart:
+          enabled: true
+          restart_time: 300
+      vrfs:
+        - name: campus
+          ip_routing: true
+      loopback_interfaces:
+        - name: Loopback2
+          description: "SFLOW SOURCE"
+          shutdown: false
+          ip_address: 10.255.1.10/32
+
+  - platforms:
+      - 720XP
+    management_interface: Management1
+    default_interface_mtu: 9214
+    structured_config:
+      vrfs:
+        - name: campus
+          ip_routing: false
+      loopback_interfaces:
+        - name: Loopback2
+          description: "SFLOW SOURCE"
+          shutdown: false
+          ip_address: 10.255.1.10/32
+
+#############################################
+#             MGMT Interface                #
+#############################################
+mgmt_gateway: 172.16.1.1
+
+#############################################
+#           BGP Peer Group Settings         #
+#############################################
+bgp_peer_groups:
+  evpn_overlay_peers:
+    password: Q4fqtbqcZ7oQuKfuWtNGRQ==
+  ipv4_underlay_peers:
+    password: 7x4B4rnJhZB438m9+BrBfQ==
+  mlag_ipv4_underlay_peer:
+    password: 4b21pAdCvWeAqpcKDFMdWw==
+  evpn_overlay_core:
+    name: "EVPN-OVERLAY-PEERS"
+
+#############################################
+#              CVaaS Connection             #
+#############################################
+# daemon_terminattr:
+#   cvaddrs:
+#     - apiserver.arista.io:443
+#   cvauth:
+#     method: "token-secure"
+#     token_file: "/mnt/flash/cv-onboarding-token"
+#   cvvrf: campus
+#   disable_aaa: true
+#   smashexcludes: "ale,flexCounter,hardware,kni,pulse,strata"
+#   ingestexclude: "/Sysdb/cell/1/agent,/Sysdb/cell/2/agent"
+
+#############################################
+#              AAA settings                 #
+#############################################
+tacacs_servers:
+  timeout: 2
+  hosts:
+    - host: 10.10.10.11
+      vrf: campus
+      key: <redacted>
+      key_type: "0" ### Remove and use has in production
+
+    - host: 10.10.10.12
+      vrf: campus
+      key: <redacted>
+      key_type: "0" ### Remove and use has in production
+
+aaa_authentication:
+  login:
+   default: group DEMO-CPPM local
+   console: group DEMO-CPPM local
+  policies:
+    on_failure_log: true
+    on_success_log: true
+
+aaa_authorization:
+  exec:
+   default: group DEMO-CPPM local
+  commands:
+    all_default: "group DEMO-CPPM local"
+  serial_console: true
+
+aaa_accounting:
+  exec:
+    default:
+      type: "start-stop"
+      group: DEMO-CPPM
+      logging: true
+    console:
+      type: "start-stop"
+      logging: true
+  commands:
+    default:
+      - commands: all
+        group: DEMO-CPPM
+        type: "start-stop"
+        logging: true
+    console:
+      - commands: all
+        type: "start-stop"
+        logging: true
+  system:
+    default:
+        type: "start-stop"
+        group: DEMO-CPPM
+
+aaa_server_groups:
+  - name: DEMO-CPPM
+    type: tacacs+
+    servers:
+      - server: 10.10.10.11
+        vrf: campus
+      - server: 10.10.10.12
+        vrf: campus
+
+ip_tacacs_source_interfaces:
+  - name: vlan4092
+    vrf: campus
+
+local_users:
+  - name: networking_user
+    privilege: 15
+    role: network-admin
+    sha512_password: <password>
+  - name: keeper
+    privilege: 15
+    role: network-admin
+    sha512_password: <password>
+  - name: test
+    privilege: 15
+    role: network-admin
+    sha512_password: "$6$4UgGZHNA/O5uJM3r$91rzQE6bTdO/ZoLgCkCmTsq6HBoPGjWnYIvwL7nVVavwzteS67lKi6gB6rSkHfuNFKT.Jbsqp0biF4TALUnn61"
+
+lldp:
+  management_address: Vlan4092
+  vrf: campus
+
+#############################################
+#            Logging settings               #
+#############################################
+logging:
+  buffered:
+    size: 512000
+    level: informational
+  trap: debugging
+  console: critical
+  format:
+    sequence_numbers: true
+    timestamp: high-resolution
+  vrfs:
+    - name: campus
+      source_interface: Vlan4092
+      hosts:
+        - name: logs.demo.com
+          protocol: udp
+          ports:
+            - 512
+
+#############################################
+#              Time/DNS settings            #
+#############################################
+ntp:
+  servers:
+    - name: time.google.com
+      iburst: true
+      preferred: true
+      vrf: MGMT
+    - name: pool.ntp.org
+      iburst: true
+      vrf: MGMT
+
+ip_name_servers:
+  - ip_address: 8.8.8.8
+    vrf: MGMT
+  - ip_address: 208.67.222.222
+    vrf: MGMT
+
+clock:
+  timezone: US/Eastern
+
+dns_domain: demo.com
+
+#############################################
+#              Monitoring settings          #
+#############################################
+snmp_settings:
+  contact: Network Engineering // 281.330.8004
+  compute_local_engineid: True
+  compute_local_engineid_source: hostname_and_ip
+  compute_v3_user_localized_key: True
+  location: True
+  ipv4_acls:
+    - name: MGMT_V4_SNMP
+      vrf: default
+    - name: MGMT_V4_SNMP
+      vrf: MGMT
+    - name: MGMT_V4_SNMP
+      vrf: campus
+  users:
+    - name: demoV3
+      group: DEMO_RO
+      version: v3
+      auth: sha
+      auth_passphrase: <redacted>
+      priv: aes
+      priv_passphrase: <redacted>
+    - name: demoRW
+      group: DEMO_RW
+      version: v3
+      auth: sha
+      auth_passphrase: <redacted>
+      priv: aes
+      priv_passphrase: <redacted>
+  groups:
+    - name: DEMO_RO
+      version: v3
+      authentication: priv
+      read: DEMO_VIEW_ALL
+    - name: DEMO_RW
+      version: v3
+      authentication: priv
+      write: DEMO_VIEW_ALL
+  views:
+    - name: DEMO_VIEW_ALL
+      mib_family_name: iso
+      included: true
+
+specific_custom_structured_configuration_snmp_server:
+  local_interfaces:
+    - name: Vlan4092
+      vrf: campus
+  vrfs:
+    - name: campus
+      enable: true
+
+sflow:
+  run: true
+  sample: 2000
+  dangerous: false
+  polling_interval: 20
+  vrfs:
+    - name: default
+      destinations:
+        - destination: 127.0.0.1
+      source_interface: Loopback2
+
+#############################################
+#              MGMT Settings                #
+#############################################
+management_defaults:
+  secret:
+    hash: sha512
+
+management_ssh:
+  access_groups:
+    - name: MGMT_V4_SSH
+      vrf: default
+    - name: MGMT_V4_SSH
+      vrf: MGMT
+    - name: MGMT_V4_SSH
+      vrf: campus
+  connection:
+    limit: 32
+    per_host: 10
+  idle_timeout: 30  # Minutes
+  vrfs:
+    - name: default
+      enable: true
+    - name: MGMT
+      enable: true
+    - name: campus
+      enable: true
+
+management_console:
+  idle_timeout: 30  # Minutes
+
+# Override eAPI default to be enabled on default, campus & MGMT VRFs.
+global_custom_structured_configuration_management_api_http:
+  enable_http: false
+  enable_https: true
+  default_services: true
+  enable_vrfs:
+    - name: default
+      access_group: MGMT_V4_EAPI
+    - name: MGMT
+      access_group: MGMT_V4_EAPI
+    - name: campus
+      access_group: MGMT_V4_EAPI
+  # https_ssl_profile: DEMO_ssl
+
+#############################################
+#             MISC. best practices          #
+#############################################
+event_monitor:
+  enabled: true
+
+terminal:
+  length: 40
+  width: 140
+
+banners:
+  motd: |
+    ***************************************************************************
+    *      L E G A L   N O T I C E  --  Y O U    M U S T    R E A D           *
+    ***************************************************************************
+    *                                                                         *
+    *     You must have explicit permission to access or configure this       *
+    *      device.  All activities performed on this device are logged and    *
+    *     violations of this policy may result in criminal prosecution.       *
+    *                                                                         *
+    ***************************************************************************
+    *                                                                         *
+    * This system is for the use of authorized users only. Individuals using  *
+    * this computer system without authority, or in excess of their authority,*
+    * are subject to having all of their activities on this system monitored  *
+    * and recorded by system personnel.                                       *
+    *                                                                         *
+    *                                                                         *
+    *  Anyone using this system expressly consents to such monitoring and is  *
+    * advised that if such monitoring reveals possible evidence of criminal   *
+    * activity, system personnel may provide the evidence of such monitoring  *
+    * to law enforcement officials.                                           *
+    *                                                                         *
+    ***************************************************************************
+    *         UNAUTHORIZED ACCESS TO THIS NETWORK DEVICE IS PROHIBITED        *
+    ***************************************************************************
+    EOF
+
+#############################################
+#    Various Global configs                 #
+#############################################
+service_unsupported_transceiver:
+  license_name: DEMO
+  license_key: redacted
+
+load_interval:
+  default: 5
+
+#############################################
+#    Config logic for global & local ACLs   #
+#############################################
+global_custom_structured_configuration_ip_access_lists:
+  - name: MGMT_V4_EAPI
+    counters_per_entry: true
+    entries:
+      - sequence: 10
+        action: permit
+        protocol: ip
+        destination: any
+        source: 172.16.1.0/24
+      - sequence: 65000
+        action: deny
+        protocol: ip
+        destination: any
+        source: any
+        log: true
+  - name: MGMT_V4_SNMP
+    counters_per_entry: true
+    entries:
+      - sequence: 10
+        action: permit
+        protocol: ip
+        destination: any
+        source: 172.16.1.0/24
+      - sequence: 65000
+        action: deny
+        protocol: ip
+        destination: any
+        source: any
+        log: true
+  - name: MGMT_V4_SSH
+    counters_per_entry: true
+    entries:
+      - sequence: 10
+        action: permit
+        protocol: ip
+        destination: any
+        source: 172.16.1.0/24
+      - sequence: 65000
+        action: deny
+        protocol: ip
+        destination: any
+        source: any
+        log: true
+
+#############################################
+#        eos_snapshot commands              #
+#############################################
+commands_list:
+  - show lldp neighbors
+  - show ip interface brief
+  - show interfaces description
+  - show version
+  - show running-config
+  - show interfaces status
+  - show mlag
+  - show mlag config-sanity
+  - show ip route vrf all
+  - show spanning-tree
+  - show logging 30
+
+##############################################
+#               SVI Profiles                 #
+##############################################
+dhcp_relay:
+  tunnel_requests_disabled: true
+
+svi_profiles:
+  - profile: dhcp_svi_profile
+    ip_helpers:
+      - ip_helper: 10.10.10.14
+      - ip_helper: 10.10.10.15
+
+##############################################
+#         DEMO default tentant               #
+##############################################
+
+tenants:
+  - name: TENANT1
+    evpn_l3_multicast:
+      enabled: true
+      evpn_underlay_l3_multicast_group_ipv4_pool: 232.0.0.0/20
+      evpn_underlay_l3_multicast_group_ipv4_pool_offset: 2
+    mac_vrf_vni_base: 10000
+    vrfs:
+      - name: campus
+        vrf_vni: 10
+        vtep_diagnostic:
+          loopback: 10
+          loopback_ip_pools:
+            - pod: BACKBONE
+              ipv4_pool: 10.252.2.32/27
+            - pod: ENGINEERING
+              ipv4_pool: 10.252.65.32/27
+            - pod: FINANCE
+              ipv4_pool: 10.252.97.32/27
+            - pod: MARKETING
+              ipv4_pool: 10.252.98.32/27
+        svis:
+          - id: 22
+            name: ENGINEERING_end-user
+            tags: [ENGINEERING]
+            enabled: true
+            ip_address_virtual: 10.10.22.1/24
+            profile: dhcp_svi_profile
+          - id: 122
+            name: ENGINEERING_VOICE
+            tags: [ENGINEERING]
+            enabled: true
+            ip_address_virtual: 10.10.122.1/24
+            profile: dhcp_svi_profile
+
+          - id: 32
+            name: FINANCE_end-user
+            tags: [FINANCE]
+            enabled: true
+            ip_address_virtual: 10.10.32.1/24
+            profile: dhcp_svi_profile
+          - id: 132
+            name: FINANCE_VOICE
+            tags: [FINANCE]
+            enabled: true
+            ip_address_virtual: 10.10.132.1/24
+            profile: dhcp_svi_profile
+
+          - id: 42
+            name: MARKETING_end-user
+            tags: [MARKETING]
+            enabled: true
+            ip_address_virtual: 10.10.32.1/24
+            profile: dhcp_svi_profile
+          - id: 142
+            name: MARKETING_VOICE
+            tags: [MARKETING]
+            enabled: true
+            ip_address_virtual: 10.10.132.1/24
+            profile: dhcp_svi_profile
+
+      - name: IOT
+        vrf_vni: 11
+        vtep_diagnostic:
+          loopback: 11
+          loopback_ip_pools:
+            - pod: BACKBONE
+              ipv4_pool: 10.253.2.32/27
+            - pod: ENGINEERING
+              ipv4_pool: 10.253.65.32/27
+            - pod: FINANCE
+              ipv4_pool: 10.253.97.32/27
+            - pod: MARKETING
+              ipv4_pool: 10.253.98.32/27
+        svis:
+          - id: 333
+            name: IOT
+            tags: [IOT]
+            enabled: true
+            ip_address_virtual: 10.10.222.1/24
+########################################################
+# DO NOT DELETE!                                       #
+# This makes AVD add RD, evpn multicast,               #
+# route-target logic to campus vrf on border leafs.    #
+          - id: 4092                                   #
+            name: BORDER-LEAFS                         #
+            tags: [VLAN_MAPPING]                       #
+########################################################
+
+    l2vlans:
+      - id: "222"
+        name: ENGINEERING_L2
+        tags: [ENGINEERING]
+      - id: "232"
+        name: FINANCE_L2
+        tags: [FINANCE]
+      - id: "242"
+        name: MARKETING_L2
+        tags: [MARKETING]
+      - id: "250"
+        name: IOT
+        tags: [ALL_SWITCHES]
+
+#############################################
+#          errdisable settings              #
+#############################################
+errdisable:
+  detect:
+    causes:
+      - "acl"
+      - "arp-inspection"
+  recovery:
+    causes:
+      - "bpduguard"
+      - "link-flap"
+      - "portsec"
+    interval: 90    # Interval in seconds.
+
+#############################################
+# parent port profiles                     #
+#############################################
+port_profiles:
+  - profile: PP-disabled
+    description: "PORT DISABLED"
+    enabled: false
+
+  - profile: PP-DEMO-SINGLE-DEVICE
+    enabled: false
+    description: "DEMO Access Port"
+    mode: "access"
+    spanning_tree_portfast: edge
+    spanning_tree_bpduguard: enabled
+
+  - profile: PP-DEMO-USER-STANDARD
+    enabled: false
+    description: "DEMO Standard User"
+    mode: "trunk phone"
+    spanning_tree_portfast: edge
+    spanning_tree_bpduguard: enabled
+
+#############################################
+# child port profiles                     #
+#############################################
+
+  - profile: PP-not-in-use
+    mode: access
+    vlans: "1"
+    description: "Not in use"
+    enabled: false
+
+  - profile: PP-INTERNET-ONLY
+    mode: access
+    vlans: "846"
+    description: "Internet Only"
+    parent_profile: PP-DEMO-SINGLE-DEVICE
+    enabled: true
+
+  - profile: PP-CAMERA
+    vlans: "{{ camera_vlan }}"
+    description: "CAM-{{ building_code }}-{{ description }}"
+    parent_profile: PP-DEMO-SINGLE-DEVICE
+    enabled: true
+
+  - profile: PP-PRINTER
+    vlans: "{{ printer_vlan }}"
+    description: "Printer-"
+    parent_profile: PP-DEMO-SINGLE-DEVICE
+    enabled: true
+
+  - profile: PP-ARUBA-AP
+    vlans: "{{ wap_vlan }}"
+    description: "AP-"
+    parent_profile: PP-DEMO-SINGLE-DEVICE
+    enabled: true
+
+  - profile: PP-ARUBA-SR
+    vlans: "{{ wap_vlan }}"
+    description: "SR-"
+    parent_profile: PP-DEMO-SINGLE-DEVICE
+    enabled: true
+
+  - profile: PP-USER
+    vlans: "{{ voice_vlan }},{{ user_vlan }}"
+    native_vlan: "{{ user_vlan }}"
+    description: "DEMO User Port"
+    parent_profile: PP-DEMO-USER-STANDARD
+    enabled: true
+
+  - profile: PP-PC
+    vlans: "22"
+    description: "END USER TESTING"
+    parent_profile: PP-DEMO-SINGLE-DEVICE
+    enabled: true
+
+  - profile: PP-IOT
+    vlans: "333"
+    description: "IOT DEVICE"
+    spanning_tree_portfast: edge
+    spanning_tree_bpduguard: enabled
+    mode: access
+    enabled: true
+
+#######################################################################################
+# Do not modify the below node type keys.                                             #
+# Defining Node Type Keys as shown below is necessary today.                          #
+# This is due to the 'super_spine needing to be an EVPN server.                       #
+#######################################################################################
+node_type_keys:
+  - key: super_spine
+    type: super-spine
+    default_evpn_role: server
+
+  - key: spine
+    type: spine
+    default_evpn_role: none
+    default_ptp_priority1: 20
+
+  - key: l3leaf
+    type: l3leaf
+    connected_endpoints: true
+    default_evpn_role: client
+    default_ptp_priority1: 30
+    mlag_support: true
+    network_services:
+      l2: true
+      l3: true
+    vtep: true
+
+  - key: l2leaf
+    type: l2leaf
+    connected_endpoints: true
+    mlag_support: true
+    network_services:
+      l2: true
+    underlay_router: false
+    uplink_type: port-channel
+
+#############################################
+#          AVD Global Settings              #
+#############################################
+# Format for path to r/w reports. Sync with default values configured in arista.avd.build_output_folders
+root_dir: '{{ inventory_dir }}'
+
+# AVD configurations output
+# Main output directory
+output_dir_name: 'intended'
+output_dir: '{{ root_dir }}/{{ output_dir_name }}'
+
+# Output for test catalog YAML files if save_catalog is set to true
+test_catalogs_dir_name: 'test_catalogs'
+test_catalogs_dir: '{{ output_dir }}/{{ test_catalogs_dir_name }}'
+
+# Output directory for eos_validate_state reports
+eos_validate_state_name: 'reports'
+eos_validate_state_dir: '{{ root_dir }}/{{ eos_validate_state_name }}'
+
+# Reports name
+eos_validate_state_md_report_path: '{{ eos_validate_state_dir }}/{{ fabric_name }}-state.md'
+eos_validate_state_csv_report_path: '{{ eos_validate_state_dir }}/{{ fabric_name }}-state.csv'
+
+# Markdown flavor to support non-text rendering
+# Only support default and github
+validate_state_markdown_flavor: "default"
+
+# The variable `skipped_tests` can be used for running/skipping tests categories
+# skipped_tests:
+#   - category: AvdTestHardware
+
+# You can also decide to skip specific subtests (ANTA test name) for more granularity
+skipped_tests:
+  - category: AvdTestBGP
+    tests:
+      - VerifyRoutingProtocolModel
+  - category: AvdTestHardware
+    tests:
+      - VerifyEnvironmentCooling
+  - category: AvdTestHardware
+  - category: AvdTestInterfacesState
+
+# Fabric Name, required to match Ansible Group name covering all devices in the Fabric | Required and **must** be an inventory group name.
+fabric_name: "all"
+
+# Allow different manufacturers
+accepted_xcvr_manufacturers: "{{ validation_role.xcvr_own_manufacturers | arista.avd.default(['Arastra, Inc.', 'Arista Networks']) }}"
+### Add Pivotal Optics
+
+# Allow different states for power supplies
+accepted_pwr_supply_states: "{{ validation_role.pwr_supply_states | arista.avd.default(['ok']) }}"
+
+# Allow different states for fans
+accepted_fan_states: "{{ validation_role.fan_states | arista.avd.default(['ok']) }}"
+
+# Generate CSV results file
+validation_report_csv: "{{ validation_role.validation_report_csv | arista.avd.default(true) }}"
+
+# Generate MD results file
+validation_report_md: "{{ validation_role.validation_report_md | arista.avd.default(true) }}"
+
+# Print only FAILED tests
+only_failed_tests: "{{ validation_role.only_failed_tests | arista.avd.default(false) }}"
+
+# Variable to enable ANTA eos_validate_state
+# Defaults to false as ANTA is currently preview
+# use_anta: false
+# Whether or not to save each device test catalog to 'test_catalogs_dir'
+# Used only when 'use_anta' is set to true
+save_catalog: false
+# Which tests to skip when using ANTA.
+# If set, Ansible tags are ignored
+# skipped_tests: []
+# Logging level for the ANTA libraries
+# Default is warning
+logging_level: "WARNING"

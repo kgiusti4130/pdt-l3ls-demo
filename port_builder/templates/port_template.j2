@@ -1,0 +1,21 @@
+---
+
+#####################################################
+servers:                                            #
+#####################################################
+
+
+
+#####################################################
+network_ports:                                      #
+#####################################################
+{# Loop over the variable switches that was defined in "create_port-configs.yml" #}
+{% for item in switches.list %}
+
+  - switches:
+      - {{ item.hostname }}
+    switch_ports:
+      - Ethernet{{ item.port }}
+    profile: {{ item.profile }}
+    description: {{ item.description }}
+{% endfor %}

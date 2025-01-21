@@ -1,0 +1,29 @@
+---
+# Inventory for ENGINEERING Fabric
+ENGINEERING:
+  children:
+    ENGINEERING_FABRIC:
+      children:
+        ENGINEERING_L3_LEAVES:
+          hosts:
+            ENGINEERING-BDF-DS1:
+            ENGINEERING-BDF-DS2:
+        ENGINEERING_L2_LEAVES:
+          hosts:
+            ENGINEERING-TX1-ES1:
+            ENGINEERING-TX1-ES2:
+#            ENGINEERING-TX1-ES3:
+#            ENGINEERING-TX1-ES4:
+#            ENGINEERING-TX2-ES1:
+#            ENGINEERING-TX2-ES2:
+#            ENGINEERING-TX2-ES3:
+#            ENGINEERING-TX2-ES4:
+
+    ENGINEERING_NETWORK_SERVICES:
+      children:
+        ENGINEERING_L3_LEAVES:
+        ENGINEERING_L2_LEAVES:
+    ENGINEERING_CONNECTED_ENDPOINTS:
+      children:
+        ENGINEERING_L3_LEAVES:
+        ENGINEERING_L2_LEAVES:

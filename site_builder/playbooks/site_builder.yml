@@ -1,0 +1,310 @@
+---
+- name: Create staging configs from CSV data
+  gather_facts: false
+  hosts: localhost
+
+  tasks:
+    - name: Register variables
+      ansible.builtin.include_vars:
+        file: "../vars/baseline.yaml"
+        name: baseline
+
+    - name: "Reading in CSV file"
+      community.general.read_csv:
+        path: ../datafiles/sites.csv
+      register: sites
+
+    # - name: Print list of sites
+    #   ansible.builtin.debug:
+    #     msg: "{{ item.site_abbreviation }}"
+    #   loop: "{{ sites.list }}"
+    #   loop_control:
+    #     extended: true
+    #     label: "{{ ansible_loop.index0 }}"
+
+    - name: Create directories for buildings/locations
+      ansible.builtin.file:
+        path: "../sample_sites/{{ item.site_abbreviation }}"
+        state: directory
+        mode: '0755'
+      loop: "{{ sites.list }}"
+      loop_control:
+        extended: true
+        label: "{{ ansible_loop.index0 }}"
+
+    - name: Create playbook directory for buildings/locations
+      ansible.builtin.file:
+        path: "../sample_sites/{{ item.site_abbreviation }}/playbooks"
+        state: directory
+        mode: '0755'
+      loop: "{{ sites.list }}"
+      loop_control:
+        extended: true
+        label: "{{ ansible_loop.index0 }}"
+
+    - name: Create group_vars directory for buildings/locations
+      ansible.builtin.file:
+        path: "../sample_sites/{{ item.site_abbreviation }}/group_vars"
+        state: directory
+        mode: '0755'
+      loop: "{{ sites.list }}"
+      loop_control:
+        extended: true
+        label: "{{ ansible_loop.index0 }}"
+
+    - name: Create intended directory for buildings/locations
+      ansible.builtin.file:
+        path: "../sample_sites/{{ item.site_abbreviation }}/intended"
+        state: directory
+        mode: '0755'
+      loop: "{{ sites.list }}"
+      loop_control:
+        extended: true
+        label: "{{ ansible_loop.index0 }}"
+
+    - name: Create documentation directory for buildings/locations
+      ansible.builtin.file:
+        path: "../sample_sites/{{ item.site_abbreviation }}/documentation"
+        state: directory
+        mode: '0755'
+      loop: "{{ sites.list }}"
+      loop_control:
+        extended: true
+        label: "{{ ansible_loop.index0 }}"
+
+    - name: Create ANTA directory for buildings/locations
+      ansible.builtin.file:
+        path: "../sample_sites/{{ item.site_abbreviation }}/anta"
+        state: directory
+        mode: '0755'
+      loop: "{{ sites.list }}"
+      loop_control:
+        extended: true
+        label: "{{ ansible_loop.index0 }}"
+
+###########################################
+# Generate Makefile for each site
+###########################################
+
+    - name: Generate Makefile for each site
+      ansible.builtin.template:
+        mode: '0755'
+        src: /workspace/site_builder/templates/makefile.j2
+        dest: "{{ baseline.output_dir }}/{{ item.site_abbreviation }}/Makefile"
+      loop: "{{ sites.list }}"
+      loop_control:
+        extended: true
+        label: "{{ ansible_loop.index0 }}"
+
+###########################################
+# Generate Makefile for sample sites
+###########################################
+
+    - name: Makefile for sample sites directory
+      ansible.builtin.template:
+        mode: "0755"
+        src: /workspace/site_builder/templates/makefile_sample_sites.j2
+        dest: "../sample_sites/Makefile"
+
+###########################################
+# Generate ansible.cfg file
+###########################################
+
+    - name: Generate ansible.cfg file
+      ansible.builtin.template:
+        mode: '0755'
+        src: /workspace/site_builder/templates/ansible_cfg.j2
+        dest: "{{ baseline.output_dir }}/{{ item.site_abbreviation }}/ansible.cfg"
+      loop: "{{ sites.list }}"
+      loop_control:
+        extended: true
+        label: "{{ ansible_loop.index0 }}"
+
+###########################################
+# Generate inventory file
+###########################################
+
+    - name: Generate Inventory file
+      ansible.builtin.template:
+        mode: '0755'
+        src: /workspace/site_builder/templates/inventory.j2
+        dest: "{{ baseline.output_dir }}/{{ item.site_abbreviation }}/inventory.yml"
+      loop: "{{ sites.list }}"
+      loop_control:
+        extended: true
+        label: "{{ ansible_loop.index0 }}"
+
+###########################################
+# Generate fabric file
+###########################################
+
+    - name: Generate Fabric file
+      ansible.builtin.template:
+        mode: '0755'
+        src: /workspace/site_builder/templates/site_fabric.j2
+        dest: "{{ baseline.output_dir }}/{{ item.site_abbreviation }}/group_vars/{{ item.site_abbreviation }}_FABRIC.yml"
+      loop: "{{ sites.list }}"
+      loop_control:
+        extended: true
+        label: "{{ ansible_loop.index0 }}"
+
+###########################################
+# Generate L2 Leaves file
+###########################################
+
+    - name: Generate L2 Leaves file
+      ansible.builtin.template:
+        mode: '0755'
+        src: /workspace/site_builder/templates/l2_leaves.j2
+        dest: "{{ baseline.output_dir }}/{{ item.site_abbreviation }}/group_vars/{{ item.site_abbreviation }}_L2_LEAVES.yml"
+      loop: "{{ sites.list }}"
+      loop_control:
+        extended: true
+        label: "{{ ansible_loop.index0 }}"
+
+###########################################
+# Generate L3 Leaves file
+###########################################
+
+    - name: Generate L3 Leaves file
+      ansible.builtin.template:
+        mode: '0755'
+        src: /workspace/site_builder/templates/l3_leaves.j2
+        dest: "{{ baseline.output_dir }}/{{ item.site_abbreviation }}/group_vars/{{ item.site_abbreviation }}_L3_LEAVES.yml"
+      loop: "{{ sites.list }}"
+      loop_control:
+        extended: true
+        label: "{{ ansible_loop.index0 }}"
+
+###########################################
+# Generate build playbooks
+###########################################
+
+    - name: Generate build playbook
+      ansible.builtin.template:
+        mode: '0755'
+        src: /workspace/site_builder/templates/build_playbook.j2
+        dest: "{{ baseline.output_dir }}/{{ item.site_abbreviation }}/playbooks/build.yml"
+      loop: "{{ sites.list }}"
+      loop_control:
+        extended: true
+        label: "{{ ansible_loop.index0 }}"
+
+###########################################
+# Copy Fix TLS playbook
+###########################################
+
+    - name: Copy fix tls playbook from Backbone Inventory - hosts will need to be updated
+      ansible.builtin.copy:
+        src: /workspace/inventories/BACKBONE/playbooks/fix_tls.yml
+        dest: "{{ baseline.output_dir }}/{{ item.site_abbreviation }}/playbooks/fix_tls.yml"
+        mode: '0644'
+      loop: "{{ sites.list }}"
+      loop_control:
+        extended: true
+        label: "{{ ansible_loop.index0 }}"
+
+###########################################
+# Generate CVaaS Deploy playbooks
+###########################################
+
+    - name: Generate CVaaS Deploy playbook
+      ansible.builtin.template:
+        mode: '0755'
+        src: /workspace/site_builder/templates/cvaas_deploy_playbook.j2
+        dest: "{{ baseline.output_dir }}/{{ item.site_abbreviation }}/playbooks/cvaas_deploy.yml"
+      loop: "{{ sites.list }}"
+      loop_control:
+        extended: true
+        label: "{{ ansible_loop.index0 }}"
+
+###########################################
+# Generate CVaaS Facts playbooks
+###########################################
+
+    - name: Generate CVaaS Facts playbook
+      ansible.builtin.template:
+        mode: '0755'
+        src: /workspace/site_builder/templates/cvaas_facts_playbook.j2
+        dest: "{{ baseline.output_dir }}/{{ item.site_abbreviation }}/playbooks/cvaas_facts.yml"
+      loop: "{{ sites.list }}"
+      loop_control:
+        extended: true
+        label: "{{ ansible_loop.index0 }}"
+
+###########################################
+# Generate site abbreviation yaml file
+###########################################
+
+    - name: Generate Site Abbreviation YAML file
+      ansible.builtin.template:
+        mode: '0755'
+        src: /workspace/site_builder/templates/site.j2
+        dest: "{{ baseline.output_dir }}/{{ item.site_abbreviation }}/group_vars/{{ item.site_abbreviation }}.yml"
+      loop: "{{ sites.list }}"
+      loop_control:
+        extended: true
+        label: "{{ ansible_loop.index0 }}"
+
+###########################################
+# Generate Connected Endpoints file
+###########################################
+
+    - name: Generate Connected Endpoints YAML file
+      ansible.builtin.template:
+        mode: '0755'
+        src: /workspace/site_builder/templates/connected_endpoints.j2
+        dest: "{{ baseline.output_dir }}/{{ item.site_abbreviation }}/group_vars/{{ item.site_abbreviation }}_CONNECTED_ENDPOINTS.yml"
+      loop: "{{ sites.list }}"
+      loop_control:
+        extended: true
+        label: "{{ ansible_loop.index0 }}"
+
+###########################################
+# Generate Network Services file
+###########################################
+
+    - name: Generate Connected Endpoints YAML file
+      ansible.builtin.template:
+        mode: '0755'
+        src: /workspace/site_builder/templates/site_network_services.j2
+        dest: "{{ baseline.output_dir }}/{{ item.site_abbreviation }}/group_vars/{{ item.site_abbreviation }}_NETWORK_SERVICES.yml"
+      loop: "{{ sites.list }}"
+      loop_control:
+        extended: true
+        label: "{{ ansible_loop.index0 }}"
+
+###########################################
+# Generate ANTA inventory file
+###########################################
+
+    - name: Generate Connected Endpoints YAML file
+      ansible.builtin.template:
+        mode: '0755'
+        src: /workspace/site_builder/templates/anta_inventory.j2
+        dest: "{{ baseline.output_dir }}/{{ item.site_abbreviation }}/anta/{{ item.site_abbreviation }}_ANTA_inventory.yml"
+      loop: "{{ sites.list }}"
+      loop_control:
+        extended: true
+        label: "{{ ansible_loop.index0 }}"
+
+###########################################
+# Generate ANTA tests file
+###########################################
+
+    - name: Generate ANTA tests file
+      ansible.builtin.template:
+        mode: '0755'
+        src: /workspace/site_builder/templates/anta_tests.j2
+        dest: "{{ baseline.output_dir }}/{{ item.site_abbreviation }}/anta/{{ item.site_abbreviation }}_ANTA_tests.yml"
+      loop: "{{ sites.list }}"
+      loop_control:
+        extended: true
+        label: "{{ ansible_loop.index0 }}"
+
+########################################################################################
+# Copy generated sample sites over to inventories folder but do not overwrite existing
+########################################################################################
+
+    - name: Copy gernerated sample sites to inventories
+      ansible.builtin.shell: cp -rn ../../site_builder/sample_sites/* ../../inventories/

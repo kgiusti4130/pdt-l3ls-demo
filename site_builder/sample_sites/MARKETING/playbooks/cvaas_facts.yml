@@ -1,0 +1,16 @@
+---
+- name: Playbook to demonstrate cv_container module
+  hosts: cvaas
+  connection: local
+  gather_facts: false
+  collections:
+    - arista.cvp.cv_facts_v3
+
+  tasks:
+    - name: Import Global CVaaS Vars
+      ansible.builtin.include_vars:
+        file: "../../../global_vars/DEMO_CVAAS.yml"
+
+    - name: Gather facts from CVaaS
+      cv_facts:
+      register: cvp_facts

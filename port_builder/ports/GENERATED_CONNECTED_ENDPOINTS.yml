@@ -1,0 +1,88 @@
+---
+
+#####################################################
+servers:                                            #
+#####################################################
+
+
+
+#####################################################
+network_ports:                                      #
+#####################################################
+
+  - switches:
+      - SAMPLE-B21-DS1
+    switch_ports:
+      - Ethernet1-21
+    profile: PP-blue
+    description: 'Test1 description'
+
+  - switches:
+      - SAMPLE-B21-DS1
+    switch_ports:
+      - Ethernet22-32
+    profile: PP-vlan1
+    description: 'Test1 description port 2'
+
+  - switches:
+      - SAMPLE-B21-DS2
+    switch_ports:
+      - Ethernet2
+    profile: PP-red
+    description: 'Test2 description'
+
+  - switches:
+      - SAMPLE-B21-ES1
+    switch_ports:
+      - Ethernet3
+    profile: PP-vlan11
+    description: 'Test3 description'
+
+  - switches:
+      - SAMPLE-T11-ES1
+    switch_ports:
+      - Ethernet4
+    profile: PP-vlan13
+    description: 'Test4 description'
+
+  - switches:
+      - SAMPLE-T12-ES1
+    switch_ports:
+      - Ethernet5
+    profile: PP-vlan15
+    description: 'Test5 description'
+
+  - switches:
+      - SAMPLE-T11-ES4
+    switch_ports:
+      - Ethernet6
+    profile: PP-vlan16
+    description: 'Test6 description'
+
+  - switches:
+      - SAMPLE-T12-ES1
+    switch_ports:
+      - Ethernet7
+    profile: PP-vlan1
+    description: 'Test7 description'
+
+  - switches:
+      - SAMPLE-T12-ES2
+    switch_ports:
+      - Ethernet8
+    profile: PP-vlan1
+    description: 'Test8 description'
+
+  - switches:
+      - SAMPLE-T12-ES3
+    switch_ports:
+      - Ethernet9
+    profile: PP-vlan1
+    description: 'Test9 description'
+
+  - switches:
+      - SAMPLE-T12-ES4
+    switch_ports:
+      - Ethernet10
+    profile: PP-vlan1
+    description: 'Test10 description'

@@ -1,0 +1,29 @@
+---
+# Inventory for FINANCE Fabric
+FINANCE:
+  children:
+    FINANCE_FABRIC:
+      children:
+        FINANCE_L3_LEAVES:
+          hosts:
+            FINANCE-BDF-DS1:
+            FINANCE-BDF-DS2:
+        FINANCE_L2_LEAVES:
+          hosts:
+            FINANCE-TX1-ES1:
+            FINANCE-TX1-ES2:
+#            FINANCE-TX1-ES3:
+#            FINANCE-TX1-ES4:
+#            FINANCE-TX2-ES1:
+#            FINANCE-TX2-ES2:
+#            FINANCE-TX2-ES3:
+#            FINANCE-TX2-ES4:
+
+    FINANCE_NETWORK_SERVICES:
+      children:
+        FINANCE_L3_LEAVES:
+        FINANCE_L2_LEAVES:
+    FINANCE_CONNECTED_ENDPOINTS:
+      children:
+        FINANCE_L3_LEAVES:
+        FINANCE_L2_LEAVES:

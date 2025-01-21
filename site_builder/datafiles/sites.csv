@@ -1,0 +1,4 @@
+site_abbreviation,bgp_as,site_number,user_vlan,voice_vlan,printer_vlan,wap_vlan,camera_vlan
+ENGINEERING,65000.998,8,22,122,51,61,71
+FINANCE,65000.999,9,32,132,52,62,72
+MARKETING,65000.997,1,42,142,53,63,73

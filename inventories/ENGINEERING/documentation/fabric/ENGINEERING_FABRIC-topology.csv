@@ -1,0 +1,45 @@
+Node Type,Node,Node Interface,Peer Type,Peer Node,Peer Interface,Node Interface Enabled
+l3leaf,ENGINEERING-BDF-DS1,Ethernet1,l2leaf,ENGINEERING-TX1-ES1,Ethernet49,True
+l3leaf,ENGINEERING-BDF-DS1,Ethernet2,l2leaf,ENGINEERING-TX1-ES2,Ethernet49,True
+l3leaf,ENGINEERING-BDF-DS1,Ethernet48,other,BACKBONE-M11-AR1,Ethernet1,True
+l3leaf,ENGINEERING-BDF-DS1,Ethernet55/1,mlag_peer,ENGINEERING-BDF-DS2,Ethernet55/1,True
+l3leaf,ENGINEERING-BDF-DS1,Ethernet56/1,mlag_peer,ENGINEERING-BDF-DS2,Ethernet56/1,True
+l3leaf,ENGINEERING-BDF-DS2,Ethernet1,l2leaf,ENGINEERING-TX1-ES1,Ethernet50,True
+l3leaf,ENGINEERING-BDF-DS2,Ethernet2,l2leaf,ENGINEERING-TX1-ES2,Ethernet50,True
+l3leaf,ENGINEERING-BDF-DS2,Ethernet48,other,BACKBONE-M12-AR1,Ethernet1,True
+l3leaf,ENGINEERING-BDF-DS2,Ethernet55/1,mlag_peer,ENGINEERING-BDF-DS1,Ethernet55/1,True
+l3leaf,ENGINEERING-BDF-DS2,Ethernet56/1,mlag_peer,ENGINEERING-BDF-DS1,Ethernet56/1,True
+l2leaf,ENGINEERING-TX1-ES1,Ethernet1,network_port,Internet Only,,True
+l2leaf,ENGINEERING-TX1-ES1,Ethernet2,network_port,Internet Only,,True
+l2leaf,ENGINEERING-TX1-ES1,Ethernet3,network_port,Internet Only,,True
+l2leaf,ENGINEERING-TX1-ES1,Ethernet4,network_port,Internet Only,,True
+l2leaf,ENGINEERING-TX1-ES1,Ethernet5,network_port,Internet Only,,True
+l2leaf,ENGINEERING-TX1-ES1,Ethernet6,network_port,Internet Only,,True
+l2leaf,ENGINEERING-TX1-ES1,Ethernet7,network_port,Internet Only,,True
+l2leaf,ENGINEERING-TX1-ES1,Ethernet8,network_port,Internet Only,,True
+l2leaf,ENGINEERING-TX1-ES1,Ethernet9,network_port,Internet Only,,True
+l2leaf,ENGINEERING-TX1-ES1,Ethernet10,network_port,Internet Only,,True
+l2leaf,ENGINEERING-TX1-ES1,Ethernet11,server,host3,eth1,True
+l2leaf,ENGINEERING-TX1-ES1,Ethernet12,server,host4,eth1,True
+l2leaf,ENGINEERING-TX1-ES1,Ethernet13,server,host5,eth1,True
+l2leaf,ENGINEERING-TX1-ES1,Ethernet47,network_port,Not in use,,False
+l2leaf,ENGINEERING-TX1-ES1,Ethernet48,network_port,Not in use,,False
+l2leaf,ENGINEERING-TX1-ES1,Ethernet49,l3leaf,ENGINEERING-BDF-DS1,Ethernet1,True
+l2leaf,ENGINEERING-TX1-ES1,Ethernet50,l3leaf,ENGINEERING-BDF-DS2,Ethernet1,True
+l2leaf,ENGINEERING-TX1-ES2,Ethernet1,network_port,Internet Only,,True
+l2leaf,ENGINEERING-TX1-ES2,Ethernet2,network_port,Internet Only,,True
+l2leaf,ENGINEERING-TX1-ES2,Ethernet3,network_port,Internet Only,,True
+l2leaf,ENGINEERING-TX1-ES2,Ethernet4,network_port,Internet Only,,True
+l2leaf,ENGINEERING-TX1-ES2,Ethernet5,network_port,Internet Only,,True
+l2leaf,ENGINEERING-TX1-ES2,Ethernet6,network_port,Internet Only,,True
+l2leaf,ENGINEERING-TX1-ES2,Ethernet7,network_port,Internet Only,,True
+l2leaf,ENGINEERING-TX1-ES2,Ethernet8,network_port,Internet Only,,True
+l2leaf,ENGINEERING-TX1-ES2,Ethernet9,network_port,Internet Only,,True
+l2leaf,ENGINEERING-TX1-ES2,Ethernet10,network_port,Internet Only,,True
+l2leaf,ENGINEERING-TX1-ES2,Ethernet11,server,host3,eth2,True
+l2leaf,ENGINEERING-TX1-ES2,Ethernet12,server,host4,eth2,True
+l2leaf,ENGINEERING-TX1-ES2,Ethernet13,server,host5,eth2,True
+l2leaf,ENGINEERING-TX1-ES2,Ethernet47,network_port,Not in use,,False
+l2leaf,ENGINEERING-TX1-ES2,Ethernet48,network_port,Not in use,,False
+l2leaf,ENGINEERING-TX1-ES2,Ethernet49,l3leaf,ENGINEERING-BDF-DS1,Ethernet2,True
+l2leaf,ENGINEERING-TX1-ES2,Ethernet50,l3leaf,ENGINEERING-BDF-DS2,Ethernet2,True

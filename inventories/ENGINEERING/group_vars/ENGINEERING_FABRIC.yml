@@ -1,0 +1,38 @@
+---
+# fabric variables for ENGINEERING
+
+fabric_name: ENGINEERING_FABRIC
+pod_name: ENGINEERING
+site_number: 8
+############################################################################
+#           Common VLANs used in port profiles                             #
+############################################################################
+camera_vlan: 71
+user_vlan: 22
+voice_vlan: 122
+printer_vlan: 51
+wap_vlan: 61
+
+############################################################################
+#           Remove everything below after runnning in prod                 #
+############################################################################
+
+#daemon_terminattr:
+#  cvaddrs:
+#    - apiserver.arista.io:443
+#  cvauth:
+#    method: "token-secure"
+#    token_file: "/mnt/flash/cv-onboarding-token"
+#  cvvrf: MGMT
+#  disable_aaa: true
+#  smashexcludes: "ale,flexCounter,hardware,kni,pulse,strata"
+#  ingestexclude: "/Sysdb/cell/1/agent,/Sysdb/cell/2/agent"
+
+aaa_authentication:
+  login:
+    default: local
+    console: local
+
+aaa_authorization:
+  exec:
+    default: local

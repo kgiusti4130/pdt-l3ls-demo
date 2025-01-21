@@ -1,0 +1,25 @@
+# .pre-commit-config.yaml
+# See https://pre-commit.com for more information
+# See https://pre-commit.com/hooks.html for more hooks
+repos:
+  - repo: https://github.com/pre-commit/pre-commit-hooks
+    rev: v4.4.0
+    hooks:
+      - id: trailing-whitespace
+        exclude_types: [svg, json]
+
+      - id: end-of-file-fixer
+        exclude_types: [svg, json]
+
+      - id: check-yaml
+        exclude: global_vars/DEMO_CVAAS.yml|fix_tls.yml|LAB_CVAAS.yml
+
+  - repo: https://github.com/igorshubovych/markdownlint-cli
+    rev: v0.33.0
+    hooks:
+      - id: markdownlint
+        name: Check for Linting errors on MarkDown files
+        files: readme.md
+        args:
+          - --fix
+          - --disable=MD013

@@ -1,0 +1,367 @@
+---
+
+# ANTA tests for {{ item.site_abbreviation }}
+
+anta.tests.software:
+  - VerifyEOSVersion:
+      versions:
+        - {{ baseline ['eos_file'] }}
+  - VerifyTerminAttrVersion:
+      versions:
+        - {{ baseline ['terminattr_version'] }}
+
+anta.tests.stp:
+  - VerifySTPMode:
+      mode: rapidPvst
+      vlans:
+        - 1
+        - 4092
+  - VerifySTPBlockedPorts:
+  - VerifySTPCounters:
+
+anta.tests.aaa:
+  - VerifyTacacsSourceIntf:
+      intf: Vlan4092
+      vrf: campus
+  - VerifyTacacsServers:
+      servers:
+        - 10.130.3.100
+        - 10.130.3.101
+        - 10.129.16.50
+      vrf: campus
+  - VerifyTacacsServerGroups:
+      groups:
+        - DEMO-CPPM
+  - VerifyAcctConsoleMethods:
+      methods:
+        - logging
+      types:
+        - exec
+        - commands
+
+anta.tests.field_notices:
+  - VerifyFieldNotice44Resolution:
+  - VerifyFieldNotice72Resolution:
+
+anta.tests.hardware:
+  - VerifyTransceiversManufacturers:
+      manufacturers:
+        - Not Present
+        - Arista Networks
+  - VerifyTemperature:
+  - VerifyTransceiversTemperature:
+  - VerifyEnvironmentSystemCooling:
+  - VerifyEnvironmentCooling:
+      states:
+        - ok
+  - VerifyEnvironmentPower:
+      states:
+        - ok
+
+anta.tests.system:
+  - VerifyUptime: # Verifies the device uptime is higher than a value in seconds.
+      minimum: 432000
+  - VerifyNTP:
+  - VerifyCoredump:
+  - VerifyAgentLogs:
+
+anta.tests.multicast:
+  - VerifyIGMPSnoopingGlobal:
+      enabled: True
+
+anta.tests.configuration:
+  - VerifyZeroTouch: # Verifies ZeroTouch is disabled.
+  - VerifyRunningConfigDiffs:
+
+anta.tests.routing:
+  generic:
+    - VerifyRoutingProtocolModel:
+        model: multi-agent
+
+  bgp:
+    - VerifyBGPPeerCount:
+        address_families:
+          - afi: "evpn"
+            num_peers: 2
+          - afi: "ipv4"
+            safi: "unicast"
+            vrf: "campus"
+            num_peers: 1
+          - afi: "ipv4"
+            safi: "unicast"
+            vrf: "default"
+            num_peers: 2
+        filters:
+          tags: ['l3_leafs']
+
+anta.tests.logging:
+  - VerifyLoggingAccounting:
+  # - VerifyLoggingErrors:
+
+anta.tests.mlag:
+  - VerifyMlagStatus:
+      filters:
+        tags: ['mlag']
+  - VerifyMlagInterfaces:
+      filters:
+        tags: ['mlag']
+  - VerifyMlagConfigSanity:
+      filters:
+        tags: ['mlag']
+
+anta.tests.interfaces:
+  # - VerifyInterfaceErrors:
+  - VerifyInterfaceDiscards:
+  - VerifyInterfaceErrDisabled:
+  - VerifyPortChannels:
+
+anta.tests.services:
+  - VerifyDNSLookup:
+      domain_names:
+        - arista.com
+        - www.google.com
+        - arista.io
+
+anta.tests.security:
+  - VerifyAPIHttpsSSL:
+      profile: DEMO_ssl
+  - VerifyAPIHttpStatus:
+  - VerifyTelnetStatus:
+  - VerifyBannerMotd:
+        motd_banner: |
+            ***************************************************************************
+            *      L E G A L   N O T I C E  --  Y O U    M U S T    R E A D           *
+            ***************************************************************************
+            *                                                                         *
+            *     You must have explicit permission to access or configure this       *
+            *      device.  All activities performed on this device are logged and    *
+            *     violations of this policy may result in criminal prosecution.       *
+            *                                                                         *
+            ***************************************************************************
+            *                                                                         *
+            * This system is for the use of authorized users only. Individuals using  *
+            * this computer system without authority, or in excess of their authority,*
+            * are subject to having all of their activities on this system monitored  *
+            * and recorded by system personnel.                                       *
+            *                                                                         *
+            *                                                                         *
+            *  Anyone using this system expressly consents to such monitoring and is  *
+            * advised that if such monitoring reveals possible evidence of criminal   *
+            * activity, system personnel may provide the evidence of such monitoring  *
+            * to law enforcement officials.                                           *
+            *                                                                         *
+            ***************************************************************************
+            *         UNAUTHORIZED ACCESS TO THIS NETWORK DEVICE IS PROHIBITED        *
+            ***************************************************************************
+
+anta.tests.bfd:
+  - VerifyBFDPeersHealth:
+      down_threshold: 1
+      filters:
+        tags: ['l3_leafs']
+
+anta.tests.vxlan:
+  - VerifyVxlan1Interface:
+  - VerifyVxlan1ConnSettings:
+      source_interface: Loopback0
+      udp_port: 4789
+      filters:
+        tags: ['l3_leafs']
+
+anta.tests.connectivity:
+  - VerifyReachability:
+      hosts:
+        - source: Vlan4092
+          destination: 8.8.8.8
+          vrf: campus
+        - source: Vlan4092
+          destination: 208.67.222.222
+          vrf: campus
+
+##################################################
+#    {{ item.site_abbreviation }}-BDF-DS1
+##################################################
+  - VerifyLLDPNeighbors:
+      neighbors:
+        - port: Ethernet1
+          neighbor_device: {{ item.site_abbreviation }}-TX1-ES1.demo.com
+          neighbor_port: Ethernet49
+        - port: Ethernet2
+          neighbor_device: {{ item.site_abbreviation }}-TX1-ES2.demo.com
+          neighbor_port: Ethernet49
+        - port: Ethernet3
+          neighbor_device: {{ item.site_abbreviation }}-TX1-ES3.demo.com
+          neighbor_port: Ethernet49
+        - port: Ethernet4
+          neighbor_device: {{ item.site_abbreviation }}-TX1-ES4.demo.com
+          neighbor_port: Ethernet49
+        - port: Ethernet5
+          neighbor_device: {{ item.site_abbreviation }}-TX1-ES1.demo.com
+          neighbor_port: Ethernet49
+        - port: Ethernet6
+          neighbor_device: {{ item.site_abbreviation }}-TX1-ES2.demo.com
+          neighbor_port: Ethernet49
+        - port: Ethernet7
+          neighbor_device: {{ item.site_abbreviation }}-TX1-ES3.demo.com
+          neighbor_port: Ethernet49
+        - port: Ethernet8
+          neighbor_device: {{ item.site_abbreviation }}-TX1-ES4.demo.com
+          neighbor_port: Ethernet49
+        - port: Ethernet55/1
+          neighbor_device: {{ item.site_abbreviation }}-BDF-DS2.demo.com
+          neighbor_port: Ethernet55/1
+        - port: Ethernet56/1
+          neighbor_device: {{ item.site_abbreviation }}-BDF-DS2.demo.com
+          neighbor_port: Ethernet56/1
+      filters:
+        tags: ['{{ item.site_abbreviation }}-BDF-DS1']
+
+##################################################
+#     {{ item.site_abbreviation }}-BDF-DS2
+##################################################
+  - VerifyLLDPNeighbors:
+      neighbors:
+        - port: Ethernet1
+          neighbor_device: {{ item.site_abbreviation }}-TX1-ES1.demo.com
+          neighbor_port: Ethernet50
+        - port: Ethernet2
+          neighbor_device: {{ item.site_abbreviation }}-TX1-ES2.demo.com
+          neighbor_port: Ethernet50
+        - port: Ethernet3
+          neighbor_device: {{ item.site_abbreviation }}-TX1-ES3.demo.com
+          neighbor_port: Ethernet50
+        - port: Ethernet4
+          neighbor_device: {{ item.site_abbreviation }}-TX1-ES4.demo.com
+          neighbor_port: Ethernet50
+        - port: Ethernet5
+          neighbor_device: {{ item.site_abbreviation }}-TX2-ES1.demo.com
+          neighbor_port: Ethernet50
+        - port: Ethernet6
+          neighbor_device: {{ item.site_abbreviation }}-TX2-ES2.demo.com
+          neighbor_port: Ethernet50
+        - port: Ethernet7
+          neighbor_device: {{ item.site_abbreviation }}-TX2-ES3.demo.com
+          neighbor_port: Ethernet50
+        - port: Ethernet8
+          neighbor_device: {{ item.site_abbreviation }}-TX2-ES4.demo.com
+          neighbor_port: Ethernet50
+        - port: Ethernet55/1
+          neighbor_device: {{ item.site_abbreviation }}-BDF-DS1.demo.com
+          neighbor_port: Ethernet55/1
+        - port: Ethernet56/1
+          neighbor_device: {{ item.site_abbreviation }}-BDF-DS1.demo.com
+          neighbor_port: Ethernet56/1
+      filters:
+        tags: ['{{ item.site_abbreviation }}-BDF-DS2']
+
+##################################################
+#     {{ item.site_abbreviation }}-TX1-ES1
+##################################################
+  - VerifyLLDPNeighbors:
+      neighbors:
+        - port: Ethernet49
+          neighbor_device: {{ item.site_abbreviation }}-MDF-DS1.demo.com
+          neighbor_port: Ethernet1
+        - port: Ethernet50
+          neighbor_device: {{ item.site_abbreviation }}-MDF-DS2.demo.com
+          neighbor_port: Ethernet1
+      filters:
+        tags: ['{{ item.site_abbreviation }}-TX1-ES1']
+
+##################################################
+#     {{ item.site_abbreviation }}-TX1-ES2
+##################################################
+  - VerifyLLDPNeighbors:
+      neighbors:
+        - port: Ethernet49
+          neighbor_device: {{ item.site_abbreviation }}-MDF-DS1.demo.com
+          neighbor_port: Ethernet2
+        - port: Ethernet50
+          neighbor_device: {{ item.site_abbreviation }}-MDF-DS2.demo.com
+          neighbor_port: Ethernet2
+      filters:
+        tags: ['{{ item.site_abbreviation }}-TX1-ES2']
+
+##################################################
+#     {{ item.site_abbreviation }}-TX1-ES3
+##################################################
+  - VerifyLLDPNeighbors:
+      neighbors:
+        - port: Ethernet49
+          neighbor_device: {{ item.site_abbreviation }}-MDF-DS1.demo.com
+          neighbor_port: Ethernet3
+        - port: Ethernet50
+          neighbor_device: {{ item.site_abbreviation }}-MDF-DS2.demo.com
+          neighbor_port: Ethernet3
+      filters:
+        tags: ['{{ item.site_abbreviation }}-TX1-ES3']
+
+##################################################
+#     {{ item.site_abbreviation }}-TX1-ES4
+##################################################
+  - VerifyLLDPNeighbors:
+      neighbors:
+        - port: Ethernet49
+          neighbor_device: {{ item.site_abbreviation }}-MDF-DS1.demo.com
+          neighbor_port: Ethernet4
+        - port: Ethernet50
+          neighbor_device: {{ item.site_abbreviation }}-MDF-DS2.demo.com
+          neighbor_port: Ethernet4
+      filters:
+        tags: ['{{ item.site_abbreviation }}-TX1-ES4']
+
+##################################################
+#     {{ item.site_abbreviation }}-TX2-ES1
+##################################################
+  - VerifyLLDPNeighbors:
+      neighbors:
+        - port: Ethernet49
+          neighbor_device: {{ item.site_abbreviation }}-MDF-DS1.demo.com
+          neighbor_port: Ethernet5
+        - port: Ethernet50
+          neighbor_device: {{ item.site_abbreviation }}-MDF-DS2.demo.com
+          neighbor_port: Ethernet5
+      filters:
+        tags: ['{{ item.site_abbreviation }}-TX2-ES1']
+
+##################################################
+#     {{ item.site_abbreviation }}-TX2-ES2
+##################################################
+  - VerifyLLDPNeighbors:
+      neighbors:
+        - port: Ethernet49
+          neighbor_device: {{ item.site_abbreviation }}-MDF-DS1.demo.com
+          neighbor_port: Ethernet6
+        - port: Ethernet50
+          neighbor_device: {{ item.site_abbreviation }}-MDF-DS2.demo.com
+          neighbor_port: Ethernet6
+      filters:
+        tags: ['{{ item.site_abbreviation }}-TX2-ES2']
+
+##################################################
+#     {{ item.site_abbreviation }}-TX2-ES3
+##################################################
+  - VerifyLLDPNeighbors:
+      neighbors:
+        - port: Ethernet49
+          neighbor_device: {{ item.site_abbreviation }}-MDF-DS1.demo.com
+          neighbor_port: Ethernet7
+        - port: Ethernet50
+          neighbor_device: {{ item.site_abbreviation }}-MDF-DS2.demo.com
+          neighbor_port: Ethernet7
+      filters:
+        tags: ['{{ item.site_abbreviation }}-TX2-ES3']
+
+##################################################
+#     {{ item.site_abbreviation }}-TX2-ES4
+##################################################
+  - VerifyLLDPNeighbors:
+      neighbors:
+        - port: Ethernet49
+          neighbor_device: {{ item.site_abbreviation }}-MDF-DS1.demo.com
+          neighbor_port: Ethernet8
+        - port: Ethernet50
+          neighbor_device: {{ item.site_abbreviation }}-MDF-DS2.demo.com
+          neighbor_port: Ethernet8
+      filters:
+        tags: ['{{ item.site_abbreviation }}-TX2-ES4']

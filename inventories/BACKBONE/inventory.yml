@@ -1,0 +1,41 @@
+BACKBONE:
+  children:
+    BACKBONE_FABRIC:
+      children:
+        BACKBONE_SUPER_SPINES:
+          hosts:
+            BACKBONE-M11-CR1:
+              is_deployed: true
+              ansible_host: 172.16.1.11
+            BACKBONE-M12-CR1:
+              is_deployed: true
+              ansible_host: 172.16.1.12
+        BACKBONE_SPINES:
+          hosts:
+            BACKBONE-M11-AR1:
+              is_deployed: true
+              ansible_host: 172.16.1.21
+            BACKBONE-M12-AR1:
+              is_deployed: false
+              ansible_host: 172.16.1.22
+            BACKBONE-M13-AR1:
+              is_deployed: true
+              ansible_host: 172.16.1.23
+            BACKBONE-M14-AR1:
+              is_deployed: false
+              ansible_host: 172.16.1.24
+        BACKBONE_L3_LEAVES:
+          hosts:
+            BACKBONE-M11-BL1:
+              is_deployed: true
+              ansible_host: 172.16.1.31
+            BACKBONE-M12-BL1:
+              is_deployed: true
+              ansible_host: 172.16.1.32
+
+    BACKBONE_NETWORK_SERVICES:
+      children:
+        BACKBONE_L3_LEAVES:
+    BACKBONE_CONNECTED_ENDPOINTS:
+      children:
+        BACKBONE_L3_LEAVES:

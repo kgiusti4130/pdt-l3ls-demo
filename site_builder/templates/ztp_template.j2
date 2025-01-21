@@ -1,0 +1,11 @@
+{%  if switch.os=='eos'  %}
+{# Loop over devices.csv that are running Arista EOS #}
+{# {% for item in switches.list if item.os=='eos' %} #}
+#!/usr/bin/Cli -p2
+enable
+copy http://{{ baseline ['server_ip'] | ansible.utils.ipaddr('address') }}/ztp/token/cv-onboarding-token flash:
+copy http://{{ baseline ['server_ip'] | ansible.utils.ipaddr('address') }}/ztp/images/{{ baseline ['eos_file'] }} flash:
+copy http://{{ baseline ['server_ip'] | ansible.utils.ipaddr('address') }}/ztp/cfg/{{ switch.hostname }}.cfg flash:startup-config
+config
+boot system flash:{{ baseline ['eos_file'] }}
+{%  endif %}

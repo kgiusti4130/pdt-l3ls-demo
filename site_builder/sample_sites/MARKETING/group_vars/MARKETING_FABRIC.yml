@@ -1,0 +1,40 @@
+---
+# fabric variables for MARKETING
+
+fabric_name: MARKETING_FABRIC
+pod_name: MARKETING
+site_number: 1
+############################################################################
+#           Common VLANs used in port profiles                             #
+############################################################################
+camera_vlan: 73
+user_vlan: 42
+voice_vlan: 142
+printer_vlan: 53
+wap_vlan: 63
+
+mgmt_gateway: 10.252.15.1
+
+############################################################################
+#           Remove everything below after runnning in prod                 #
+############################################################################
+
+#daemon_terminattr:
+#  cvaddrs:
+#    - apiserver.arista.io:443
+#  cvauth:
+#    method: "token-secure"
+#    token_file: "/mnt/flash/cv-onboarding-token"
+#  cvvrf: MGMT
+#  disable_aaa: true
+#  smashexcludes: "ale,flexCounter,hardware,kni,pulse,strata"
+#  ingestexclude: "/Sysdb/cell/1/agent,/Sysdb/cell/2/agent"
+
+aaa_authentication:
+  login:
+    default: local
+    console: local
+
+aaa_authorization:
+  exec:
+    default: local

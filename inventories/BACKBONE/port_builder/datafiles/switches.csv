@@ -1,0 +1,12 @@
+hostname,port,profile,description
+BGFH-B21-DS1,1-21,PP-blue,'Test1 description'
+BGFH-B21-DS1,22-32,PP-vlan1,'Test1 description port 2'
+BGFH-B21-DS2,2,PP-red,'Test2 description'
+BGFH-B21-ES1,3,PP-vlan11,'Test3 description'
+BGFH-T11-ES1,4,PP-vlan13,'Test4 description'
+BGFH-T12-ES1,5,PP-vlan15,'Test5 description'
+BGFH-T11-ES4,6,PP-vlan16,'Test6 description'
+BGFH-T12-ES1,7,PP-vlan1,'Test7 description'
+BGFH-T12-ES2,8,PP-vlan1,'Test8 description'
+BGFH-T12-ES3,9,PP-vlan1,'Test9 description'
+BGFH-T12-ES4,10,PP-vlan1,'Test10 description'

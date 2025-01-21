@@ -1,0 +1,40 @@
+---
+# fabric variables for {{ item.site_abbreviation }}
+
+fabric_name: {{ item.site_abbreviation }}_FABRIC
+pod_name: {{ item.site_abbreviation }}
+site_number: {{ item.site_number }}
+############################################################################
+#           Common VLANs used in port profiles                             #
+############################################################################
+camera_vlan: {{ item.camera_vlan }}
+user_vlan: {{ item.user_vlan }}
+voice_vlan: {{ item.voice_vlan }}
+printer_vlan: {{ item.printer_vlan }}
+wap_vlan: {{ item.wap_vlan }}
+
+mgmt_gateway: 10.252.15.1
+
+############################################################################
+#           Remove everything below after runnning in prod                 #
+############################################################################
+
+#daemon_terminattr:
+#  cvaddrs:
+#    - apiserver.arista.io:443
+#  cvauth:
+#    method: "token-secure"
+#    token_file: "/mnt/flash/cv-onboarding-token"
+#  cvvrf: MGMT
+#  disable_aaa: true
+#  smashexcludes: "ale,flexCounter,hardware,kni,pulse,strata"
+#  ingestexclude: "/Sysdb/cell/1/agent,/Sysdb/cell/2/agent"
+
+aaa_authentication:
+  login:
+    default: local
+    console: local
+
+aaa_authorization:
+  exec:
+    default: local

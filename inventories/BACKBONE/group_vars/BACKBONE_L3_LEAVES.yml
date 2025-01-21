@@ -1,0 +1,41 @@
+---
+type: l3leaf
+
+monitor_connectivity:
+  shutdown: true
+  interval: 5
+  hosts:
+    - name: AWS-East-1
+      ip: 50.17.255.254
+    - name: Google
+      ip: 8.8.8.8
+      url: http://www.google.com
+    - name: OpenDNS
+      ip: 208.67.222.222
+
+#############################################
+#          Custom Structured Config         #
+#############################################
+
+specific_custom_structured_configuration_static_routes:
+  - destination_address_prefix: "10.0.0.0/8"
+    gateway: Null0
+    vrf: campus
+  - destination_address_prefix: "172.16.0.0/12"
+    gateway: Null0
+    vrf: campus
+  - destination_address_prefix: "192.168.0.0/16"
+    gateway: Null0
+    vrf: campus
+  - destination_address_prefix: "0.0.0.0/0"
+    gateway: Null0
+    vrf: campus
+
+specific_custom_structured_configuration_router_bgp:
+  vrfs:
+    - name: campus
+      networks:
+        - prefix: 10.0.0.0/8
+        - prefix: 172.16.0.0/12
+        - prefix: 192.168.0.0/16
+        - prefix: 0.0.0.0/0

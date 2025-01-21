@@ -1,0 +1,175 @@
+---
+
+# ENGINEERING config file
+#############################################
+#                 L3 Leafs                  #
+#############################################
+l3leaf:
+  defaults:
+    platform: cEOS-lab
+    mlag_peer_ipv4_pool: 10.252.8.0/31
+    mlag_peer_l3_ipv4_pool: 10.252.8.2/31
+    loopback_ipv4_pool: 10.252.8.64/26
+    loopback_ipv4_offset: 2 # Match number of spine switches
+    vtep_loopback_ipv4_pool: 10.252.8.128/26
+    virtual_router_mac_address: aa:aa:bb:bb:cc:cc
+    spanning_tree_priority: 8192
+    spanning_tree_mode: rapid-pvst
+    evpn_gateway:
+      remote_peers:
+        - hostname: "BACKBONE-M11-CR1 Loopback"
+          ip_address: 10.252.0.3
+          bgp_as: 65000.1
+        - hostname: "BACKBONE-M12-CR1 Loopback"
+          ip_address: 10.252.0.4
+          bgp_as: 65000.1
+
+  node_groups:
+#############################################
+#   ENGINEERING BDF
+#############################################
+    - group: ENGINEERING_L3_LEAF1
+      bgp_as: 65000.998
+      filter:
+        tags: [ALL_SWITCHES, ENGINEERING, IOT]
+        tenants: [TENANT1]
+      nodes:
+        - name: ENGINEERING-BDF-DS1
+          id: 1
+          mgmt_ip: 172.16.1.40/24
+################################################
+# Uncomment to enter maintenance mode for BGP  #
+################################################
+          # structured_config:
+          #   bgp_groups:
+          #     - name: BGP_MAINTENANCE
+          #       vrf: default
+          #       neighbors:
+          #         - IPv4-UNDERLAY-PEERS
+          #         - EVPN-OVERLAY-PEERS
+          #         - MLAG-IPv4-UNDERLAY-PEER
+          #   maintenance:
+          #     units:
+          #       - name: BGP_UNIT
+          #         groups:
+          #           bgp_groups:
+          #             - BGP_MAINTENANCE
+          #         quiesce: true
+
+        - name: ENGINEERING-BDF-DS2
+          id: 2
+          mgmt_ip: 172.16.1.41/24
+################################################
+# Uncomment to enter maintenance mode for BGP  #
+################################################
+          # structured_config:
+          #   bgp_groups:
+          #     - name: BGP_MAINTENANCE
+          #       vrf: default
+          #       neighbors:
+          #         - IPv4-UNDERLAY-PEERS
+          #         - EVPN-OVERLAY-PEERS
+          #         - MLAG-IPv4-UNDERLAY-PEER
+          #   maintenance:
+          #     units:
+          #       - name: BGP_UNIT
+          #         groups:
+          #           bgp_groups:
+          #             - BGP_MAINTEN
+
+#############################################
+#                 L2 Leafs                  #
+#############################################
+l2leaf:
+  defaults:
+    platform: cEOS-lab
+    spanning_tree_mode: rapid-pvst
+    mlag_peer_ipv4_pool: 10.252.8.0/31
+    inband_mgmt_vlan: 4092
+    inband_mgmt_vlan_name: INBAND_MGMT
+    inband_mgmt_description: INBAND_MGMT
+    inband_mgmt_subnet: 10.252.8.192/26
+    inband_mgmt_gateway: 10.252.8.193
+    structured_config:
+      switchport_default:
+        phone:
+          vlan: "122"
+
+  node_groups:
+#############################################
+# ENGINEERING TX1
+#############################################
+    - group: ENGINEERING_L2_TX1
+      uplink_switches: ['ENGINEERING-BDF-DS1', 'ENGINEERING-BDF-DS2']
+      filter:
+        tags: [ALL_SWITCHES, ENGINEERING, IOT]
+        tenants: [TENANT1]
+      mlag: false
+
+      nodes:
+        - name: ENGINEERING-TX1-ES1
+          id: 3
+          mgmt_ip: 172.16.1.42/24
+          uplink_switch_interfaces:
+            - Ethernet1
+            - Ethernet1
+
+        - name: ENGINEERING-TX1-ES2
+          id: 4
+          mgmt_ip: 172.16.1.43/24
+          uplink_switch_interfaces:
+            - Ethernet2
+            - Ethernet2
+
+        - name: ENGINEERING-TX1-ES3
+          id: 5
+          mgmt_ip: 172.16.1.44/24
+          uplink_switch_interfaces:
+            - Ethernet3
+            - Ethernet3
+
+        - name: ENGINEERING-TX1-ES4
+          id: 6
+          mgmt_ip: 172.16.1.45/24
+          uplink_switch_interfaces:
+            - Ethernet4
+            - Ethernet4
+
+#############################################
+#     ENGINEERING TX2
+#############################################
+    - group: ENGINEERING_L2_TX2
+      uplink_switches: ['ENGINEERING-BDF-DS1', 'ENGINEERING-BDF-DS2']
+      filter:
+        tags: [ALL_SWITCHES, ENGINEERING, IOT]
+        tenants: [TENANT1]
+      mlag: false
+
+      nodes:
+        - name: ENGINEERING-TX2-ES1
+          id: 7
+          mgmt_ip: 172.16.1.46/24
+          uplink_switch_interfaces:
+            - Ethernet5
+            - Ethernet5
+
+        - name: ENGINEERING-TX2-ES2
+          id: 8
+          mgmt_ip: 172.16.1.47/24
+          uplink_switch_interfaces:
+            - Ethernet6
+            - Ethernet6
+
+        - name: ENGINEERING-TX2-ES3
+          id: 9
+          mgmt_ip: 172.16.1.48/24
+          uplink_switch_interfaces:
+            - Ethernet7
+            - Ethernet7
+
+        - name: ENGINEERING-TX2-ES4
+          id: 10
+          mgmt_ip: 172.16.1.49/24
+          uplink_switch_interfaces:
+            - Ethernet8
+            - Ethernet8

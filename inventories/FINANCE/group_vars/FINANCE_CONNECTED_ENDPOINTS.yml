@@ -1,0 +1,40 @@
+---
+# Connected endpoints for FINANCE
+servers:
+  - name: hostXYZ # Sample MLAG config
+    adapters:
+      - endpoint_ports: [eth1,eth2]
+        switch_ports: [Ethernet11,Ethernet12]
+        switches: [FINANCE-TX1-ES3,FINANCE-TX1-ES3]
+        profile: PP-ARUBA-AP
+        port_channel:
+          mode: active
+
+#####################################################
+network_ports:                                      #
+#####################################################
+
+  - switches:
+      - FINANCE-TX[12]-ES[1234]
+    switch_ports:
+      - Ethernet1-10
+    profile: PP-USER
+
+  - switches:
+      - FINANCE-TX[12]-ES[1234]
+    switch_ports:
+      - Ethernet25
+    description: "test port local"
+    mode: access
+    vlans: "111"
+    enabled: false
+    structured_config:
+      qos:
+        trust: dscp
+      spanning_tree_guard: loop
+
+  - switches:
+      - FINANCE-TX[12]-ES[1234]
+    switch_ports:
+      - Ethernet47-48
+    profile: PP-not-in-use

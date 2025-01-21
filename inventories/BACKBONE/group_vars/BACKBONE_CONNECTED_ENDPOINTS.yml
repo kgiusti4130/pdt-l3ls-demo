@@ -1,0 +1,33 @@
+---
+
+# port_profiles are in DEMO_GLOBAL.yml
+
+#############################################
+# Network port profiles                     #
+#############################################
+
+servers:
+  - name: host1 # Containerlab test host1
+    adapters:
+      - endpoint_ports: [eth1,eth2]
+        switch_ports: [Ethernet10,Ethernet10]
+        switches: [BACKBONE-M11-BL1,BACKBONE-M12-BL1]
+        description: "DEMO User Port"
+        mode: access
+        vlans: 22
+        enabled: true
+        port_channel:
+          mode: active
+
+  - name: host2 # Containerlab test host2
+    adapters:
+      - endpoint_ports: [eth1,eth2]
+        switch_ports: [Ethernet11,Ethernet11]
+        switches: [BACKBONE-M11-BL1,BACKBONE-M12-BL1]
+        profile: PP-IOT
+        port_channel:
+          mode: active
+
+#####################################################
+network_ports:                                      #
+#####################################################

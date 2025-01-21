@@ -1,0 +1,7 @@
+#!/usr/bin/Cli -p2
+enable
+copy http://10.101.21.25/ztp/token/cv-onboarding-token flash:
+copy http://10.101.21.25/ztp/images/EOS-4.31.4M flash:
+copy http://10.101.21.25/ztp/cfg/ENGINEERING-TB2-ES2.cfg flash:startup-config
+config
+boot system flash:EOS-4.31.4M

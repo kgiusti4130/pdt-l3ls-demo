@@ -1,0 +1,420 @@
+hostname: ENGINEERING-TX1-ES1
+is_deployed: true
+static_routes:
+- vrf: MGMT
+  destination_address_prefix: 0.0.0.0/0
+  gateway: 172.16.1.1
+- destination_address_prefix: 0.0.0.0/0
+  gateway: 10.252.8.193
+service_routing_protocols_model: multi-agent
+vlan_internal_order:
+  allocation: ascending
+  range:
+    beginning: 1006
+    ending: 1199
+aaa_root:
+  disabled: true
+config_end: true
+enable_password:
+  disabled: true
+transceiver_qsfp_default_mode_4x10: true
+interface_defaults:
+  mtu: 1500
+spanning_tree:
+  mode: rapid-pvst
+  rapid_pvst_instances:
+  - id: 1-4094
+    priority: 32768
+local_users:
+- name: keeper
+  privilege: 15
+  role: network-admin
+  sha512_password: <password>
+- name: networking_user
+  privilege: 15
+  role: network-admin
+  sha512_password: <password>
+- name: test
+  privilege: 15
+  role: network-admin
+  sha512_password: $6$4UgGZHNA/O5uJM3r$91rzQE6bTdO/ZoLgCkCmTsq6HBoPGjWnYIvwL7nVVavwzteS67lKi6gB6rSkHfuNFKT.Jbsqp0biF4TALUnn61
+vrfs:
+- name: MGMT
+  ip_routing: false
+- name: campus
+  ip_routing: true
+management_interfaces:
+- name: Management0
+  description: OOB_MANAGEMENT
+  shutdown: false
+  vrf: MGMT
+  ip_address: 172.16.1.42/24
+  gateway: 172.16.1.1
+  type: oob
+  lldp:
+    transmit: false
+    receive: false
+mac_address_table:
+  aging_time: 1800
+management_api_http:
+  enable_vrfs:
+  - name: MGMT
+    access_group: MGMT_V4_EAPI
+  - name: default
+    access_group: MGMT_V4_EAPI
+  - name: campus
+    access_group: MGMT_V4_EAPI
+  enable_https: true
+  enable_http: false
+  default_services: true
+snmp_server:
+  engine_ids:
+    local: b16aebc5f9accb981479b86cd2a01671e6c5b497
+  contact: Network Engineering // 281.330.8004
+  location: ENGINEERING_FABRIC ENGINEERING ENGINEERING-TX1-ES1
+  users:
+  - name: demoV3
+    group: DEMO_RO
+    version: v3
+    localized: b16aebc5f9accb981479b86cd2a01671e6c5b497
+    auth: sha
+    auth_passphrase: 061497762670f0d5f57e187f2f7aeae14c4e6233
+    priv: aes
+    priv_passphrase: 061497762670f0d5f57e187f2f7aeae1
+  - name: demoRW
+    group: DEMO_RW
+    version: v3
+    localized: b16aebc5f9accb981479b86cd2a01671e6c5b497
+    auth: sha
+    auth_passphrase: 061497762670f0d5f57e187f2f7aeae14c4e6233
+    priv: aes
+    priv_passphrase: 061497762670f0d5f57e187f2f7aeae1
+  ipv4_acls:
+  - name: MGMT_V4_SNMP
+    vrf: default
+  - name: MGMT_V4_SNMP
+    vrf: MGMT
+  - name: MGMT_V4_SNMP
+    vrf: campus
+  views:
+  - name: DEMO_VIEW_ALL
+    mib_family_name: iso
+    included: true
+  groups:
+  - name: DEMO_RO
+    version: v3
+    authentication: priv
+    read: DEMO_VIEW_ALL
+  - name: DEMO_RW
+    version: v3
+    authentication: priv
+    write: DEMO_VIEW_ALL
+  local_interfaces:
+  - name: Vlan4092
+    vrf: campus
+  vrfs:
+  - name: campus
+    enable: true
+ethernet_interfaces:
+- name: Ethernet49
+  peer: ENGINEERING-BDF-DS1
+  peer_interface: Ethernet1
+  peer_type: l3leaf
+  description: L2_ENGINEERING-BDF-DS1_Ethernet1
+  shutdown: false
+  channel_group:
+    id: 49
+    mode: active
+- name: Ethernet50
+  peer: ENGINEERING-BDF-DS2
+  peer_interface: Ethernet1
+  peer_type: l3leaf
+  description: L2_ENGINEERING-BDF-DS2_Ethernet1
+  shutdown: false
+  channel_group:
+    id: 49
+    mode: active
+- name: Ethernet1
+  peer_type: network_port
+  port_profile: PP-INTERNET-ONLY
+  description: Internet Only
+  shutdown: false
+  switchport:
+    enabled: true
+    mode: access
+    access_vlan: 846
+  spanning_tree_portfast: edge
+  spanning_tree_bpduguard: enabled
+- name: Ethernet2
+  peer_type: network_port
+  port_profile: PP-INTERNET-ONLY
+  description: Internet Only
+  shutdown: false
+  switchport:
+    enabled: true
+    mode: access
+    access_vlan: 846
+  spanning_tree_portfast: edge
+  spanning_tree_bpduguard: enabled
+- name: Ethernet3
+  peer_type: network_port
+  port_profile: PP-INTERNET-ONLY
+  description: Internet Only
+  shutdown: false
+  switchport:
+    enabled: true
+    mode: access
+    access_vlan: 846
+  spanning_tree_portfast: edge
+  spanning_tree_bpduguard: enabled
+- name: Ethernet4
+  peer_type: network_port
+  port_profile: PP-INTERNET-ONLY
+  description: Internet Only
+  shutdown: false
+  switchport:
+    enabled: true
+    mode: access
+    access_vlan: 846
+  spanning_tree_portfast: edge
+  spanning_tree_bpduguard: enabled
+- name: Ethernet5
+  peer_type: network_port
+  port_profile: PP-INTERNET-ONLY
+  description: Internet Only
+  shutdown: false
+  switchport:
+    enabled: true
+    mode: access
+    access_vlan: 846
+  spanning_tree_portfast: edge
+  spanning_tree_bpduguard: enabled
+- name: Ethernet6
+  peer_type: network_port
+  port_profile: PP-INTERNET-ONLY
+  description: Internet Only
+  shutdown: false
+  switchport:
+    enabled: true
+    mode: access
+    access_vlan: 846
+  spanning_tree_portfast: edge
+  spanning_tree_bpduguard: enabled
+- name: Ethernet7
+  peer_type: network_port
+  port_profile: PP-INTERNET-ONLY
+  description: Internet Only
+  shutdown: false
+  switchport:
+    enabled: true
+    mode: access
+    access_vlan: 846
+  spanning_tree_portfast: edge
+  spanning_tree_bpduguard: enabled
+- name: Ethernet8
+  peer_type: network_port
+  port_profile: PP-INTERNET-ONLY
+  description: Internet Only
+  shutdown: false
+  switchport:
+    enabled: true
+    mode: access
+    access_vlan: 846
+  spanning_tree_portfast: edge
+  spanning_tree_bpduguard: enabled
+- name: Ethernet9
+  peer_type: network_port
+  port_profile: PP-INTERNET-ONLY
+  description: Internet Only
+  shutdown: false
+  switchport:
+    enabled: true
+    mode: access
+    access_vlan: 846
+  spanning_tree_portfast: edge
+  spanning_tree_bpduguard: enabled
+- name: Ethernet10
+  peer_type: network_port
+  port_profile: PP-INTERNET-ONLY
+  description: Internet Only
+  shutdown: false
+  switchport:
+    enabled: true
+    mode: access
+    access_vlan: 846
+  spanning_tree_portfast: edge
+  spanning_tree_bpduguard: enabled
+- name: Ethernet47
+  peer_type: network_port
+  port_profile: PP-not-in-use
+  description: Not in use
+  shutdown: true
+  switchport:
+    enabled: true
+    mode: access
+    access_vlan: 1
+- name: Ethernet48
+  peer_type: network_port
+  port_profile: PP-not-in-use
+  description: Not in use
+  shutdown: true
+  switchport:
+    enabled: true
+    mode: access
+    access_vlan: 1
+- name: Ethernet11
+  peer: host3
+  peer_interface: eth1
+  peer_type: server
+  port_profile: PP-PC
+  description: END USER TESTING
+  shutdown: false
+  channel_group:
+    id: 11
+    mode: active
+- name: Ethernet12
+  peer: host4
+  peer_interface: eth1
+  peer_type: server
+  port_profile: PP-PC
+  description: END USER TESTING
+  shutdown: false
+  channel_group:
+    id: 12
+    mode: active
+- name: Ethernet13
+  peer: host5
+  peer_interface: eth1
+  peer_type: server
+  port_profile: PP-IOT
+  description: IOT DEVICE
+  shutdown: false
+  channel_group:
+    id: 13
+    mode: active
+port_channel_interfaces:
+- name: Port-Channel49
+  description: L2_ENGINEERING_L3_LEAF1_Port-Channel1
+  switchport:
+    enabled: true
+    mode: trunk
+    trunk:
+      allowed_vlan: 22,122,222,250,333,4092
+  shutdown: false
+- name: Port-Channel11
+  description: SERVER_host3
+  shutdown: false
+  switchport:
+    enabled: true
+    mode: access
+    access_vlan: 22
+  spanning_tree_portfast: edge
+  spanning_tree_bpduguard: enabled
+- name: Port-Channel12
+  description: SERVER_host4
+  shutdown: false
+  switchport:
+    enabled: true
+    mode: access
+    access_vlan: 22
+  spanning_tree_portfast: edge
+  spanning_tree_bpduguard: enabled
+- name: Port-Channel13
+  description: SERVER_host5
+  shutdown: false
+  switchport:
+    enabled: true
+    mode: access
+    access_vlan: 333
+  spanning_tree_portfast: edge
+  spanning_tree_bpduguard: enabled
+vlans:
+- id: 22
+  name: ENGINEERING_end-user
+  tenant: TENANT1
+- id: 122
+  name: ENGINEERING_VOICE
+  tenant: TENANT1
+- id: 333
+  name: IOT
+  tenant: TENANT1
+- id: 222
+  name: ENGINEERING_L2
+  tenant: TENANT1
+- id: 250
+  name: IOT
+  tenant: TENANT1
+- id: 4092
+  tenant: system
+  name: INBAND_MGMT
+ip_igmp_snooping:
+  globally_enabled: true
+vlan_interfaces:
+- name: Vlan4092
+  description: INBAND_MGMT
+  shutdown: false
+  mtu: 1500
+  ip_address: 10.252.8.198/26
+  type: inband_mgmt
+metadata:
+  platform: cEOS-lab
+switchport_default:
+  phone:
+    vlan: 122
+router_bgp:
+  as_notation: asdot
+  distance:
+    external_routes: 20
+    internal_routes: 200
+    local_routes: 200
+  graceful_restart:
+    enabled: true
+    restart_time: 300
+loopback_interfaces:
+- name: Loopback2
+  description: SFLOW SOURCE
+  shutdown: false
+  ip_address: 10.255.1.10/32
+ip_access_lists:
+- name: MGMT_V4_EAPI
+  counters_per_entry: true
+  entries:
+  - sequence: 10
+    action: permit
+    protocol: ip
+    destination: any
+    source: 172.16.1.0/24
+  - sequence: 65000
+    action: deny
+    protocol: ip
+    destination: any
+    source: any
+    log: true
+- name: MGMT_V4_SNMP
+  counters_per_entry: true
+  entries:
+  - sequence: 10
+    action: permit
+    protocol: ip
+    destination: any
+    source: 172.16.1.0/24
+  - sequence: 65000
+    action: deny
+    protocol: ip
+    destination: any
+    source: any
+    log: true
+- name: MGMT_V4_SSH
+  counters_per_entry: true
+  entries:
+  - sequence: 10
+    action: permit
+    protocol: ip
+    destination: any
+    source: 172.16.1.0/24
+  - sequence: 65000
+    action: deny
+    protocol: ip
+    destination: any
+    source: any
+    log: true

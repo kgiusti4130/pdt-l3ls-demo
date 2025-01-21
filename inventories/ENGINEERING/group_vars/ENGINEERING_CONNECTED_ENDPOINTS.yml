@@ -1,0 +1,45 @@
+---
+# Connected endpoints for ENGINEERING
+servers:
+  - name: host3 # Containerlab test host3
+    adapters:
+      - endpoint_ports: [eth1,eth2]
+        switch_ports: [Ethernet11,Ethernet11]
+        switches: [ENGINEERING-TX1-ES1,ENGINEERING-TX1-ES2]
+        profile: PP-PC
+        port_channel:
+          mode: active
+
+  - name: host4 # Containerlab test host4
+    adapters:
+      - endpoint_ports: [eth1,eth2]
+        switch_ports: [Ethernet12,Ethernet12]
+        switches: [ENGINEERING-TX1-ES1,ENGINEERING-TX1-ES2]
+        profile: PP-PC
+        port_channel:
+          mode: active
+
+  - name: host5 # Containerlab test host5
+    adapters:
+      - endpoint_ports: [eth1,eth2]
+        switch_ports: [Ethernet13,Ethernet13]
+        switches: [ENGINEERING-TX1-ES1,ENGINEERING-TX1-ES2]
+        profile: PP-IOT
+        port_channel:
+          mode: active
+
+#####################################################
+network_ports:                                      #
+#####################################################
+
+  - switches:
+      - ENGINEERING-TX[12]-ES[1234]
+    switch_ports:
+      - Ethernet1-10
+    profile: PP-INTERNET-ONLY
+
+  - switches:
+      - ENGINEERING-TX[12]-ES[1234]
+    switch_ports:
+      - Ethernet47-48
+    profile: PP-not-in-use

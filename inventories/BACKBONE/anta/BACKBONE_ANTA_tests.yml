@@ -1,0 +1,420 @@
+---
+
+anta.tests.software:
+  - VerifyEOSVersion:
+      versions:
+        - 4.31.3M-36737551.4313M (engineering build)
+  - VerifyTerminAttrVersion:
+      versions:
+        - v1.31.3
+
+anta.tests.aaa:
+  - VerifyTacacsSourceIntf:
+      intf: Vlan4092
+      vrf: campus
+  - VerifyTacacsServers:
+      servers:
+        - 10.130.3.100
+        - 10.130.3.101
+      vrf: campus
+  - VerifyTacacsServerGroups:
+      groups:
+        - DEMO-CPPM
+  - VerifyAcctConsoleMethods:
+      methods:
+        - logging
+      types:
+        - exec
+        - commands
+
+anta.tests.stp:
+  - VerifySTPMode:
+      mode: rapidPvst
+      vlans:
+        - 1
+        - 4092
+      filters:
+        tags: ['l3_leafs','l2_leafs']
+  - VerifySTPBlockedPorts:
+      filters:
+        tags: ['l3_leafs','l2_leafs']
+  - VerifySTPCounters:
+      filters:
+        tags: ['l3_leafs','l2_leafs']
+  - VerifySTPBlockedPorts:
+      filters:
+        tags: ['l3_leafs','l2_leafs']
+  - VerifySTPCounters:
+      filters:
+        tags: ['l3_leafs','l2_leafs']
+
+anta.tests.security:
+  - VerifyAPIHttpStatus:
+  - VerifyTelnetStatus:
+  - VerifyBannerMotd:
+        motd_banner: |
+            ***************************************************************************
+            *      L E G A L   N O T I C E  --  Y O U    M U S T    R E A D           *
+            ***************************************************************************
+            *                                                                         *
+            *     You must have explicit permission to access or configure this       *
+            *      device.  All activities performed on this device are logged and    *
+            *     violations of this policy may result in criminal prosecution.       *
+            *                                                                         *
+            ***************************************************************************
+            *                                                                         *
+            * This system is for the use of authorized users only. Individuals using  *
+            * this computer system without authority, or in excess of their authority,*
+            * are subject to having all of their activities on this system monitored  *
+            * and recorded by system personnel.                                       *
+            *                                                                         *
+            *                                                                         *
+            *  Anyone using this system expressly consents to such monitoring and is  *
+            * advised that if such monitoring reveals possible evidence of criminal   *
+            * activity, system personnel may provide the evidence of such monitoring  *
+            * to law enforcement officials.                                           *
+            *                                                                         *
+            ***************************************************************************
+            *         UNAUTHORIZED ACCESS TO THIS NETWORK DEVICE IS PROHIBITED        *
+            ***************************************************************************
+
+anta.tests.services:
+  - VerifyDNSLookup:
+      domain_names:
+        - arista.com
+        - www.google.com
+        - arista.io
+
+# anta.tests.bfd:
+#   - VerifyBFDPeersHealth:
+#       down_threshold: 1
+#       filters:
+#         tags: ['l3_leafs','super_spines']
+
+anta.tests.vxlan:
+  - VerifyVxlan1Interface:
+      filters:
+        tags: ['l3_leafs']
+  - VerifyVxlan1ConnSettings:
+      source_interface: Loopback0
+      udp_port: 4789
+      filters:
+        tags: ['l3_leafs']
+
+anta.tests.multicast:
+  - VerifyIGMPSnoopingGlobal:
+      enabled: True
+
+anta.tests.field_notices:
+  - VerifyFieldNotice44Resolution:
+  - VerifyFieldNotice72Resolution:
+
+anta.tests.hardware:
+  - VerifyTransceiversManufacturers:
+      manufacturers:
+        - Not Present
+        - Arista Networks
+  - VerifyTemperature:
+  - VerifyTransceiversTemperature:
+  - VerifyEnvironmentSystemCooling:
+  - VerifyEnvironmentCooling:
+      states:
+        - ok
+  - VerifyEnvironmentPower:
+      states:
+        - ok
+
+anta.tests.system:
+  - VerifyUptime: # Verifies the device uptime is higher than a value in seconds.
+      minimum: 432000
+  - VerifyCPUUtilization:
+  - VerifyMemoryUtilization:
+  - VerifyFileSystemUtilization:
+  - VerifyNTP:
+  - VerifyCoredump:
+  - VerifyAgentLogs:
+
+anta.tests.configuration:
+  - VerifyZeroTouch: # Verifies ZeroTouch is disabled.
+  # - VerifyRunningConfigDiffs:
+
+anta.tests.routing:
+  generic:
+    - VerifyRoutingProtocolModel:
+        model: multi-agent
+
+  bgp:
+    - VerifyBGPPeerCount:
+        address_families:
+          - afi: "evpn"
+            num_peers: 2
+          - afi: "ipv4"
+            safi: "unicast"
+            vrf: "campus"
+            num_peers: 1
+          - afi: "ipv4"
+            safi: "unicast"
+            vrf: "default"
+            num_peers: 3
+        filters:
+          tags: ['backbone_l3_leafs']
+
+anta.tests.logging:
+  - VerifyLoggingAccounting:
+  # - VerifyLoggingErrors:
+
+anta.tests.mlag:
+  - VerifyMlagStatus:
+      filters:
+        tags: ['mlag']
+  - VerifyMlagInterfaces:
+      filters:
+        tags: ['mlag']
+  - VerifyMlagConfigSanity:
+      filters:
+        tags: ['mlag']
+
+anta.tests.interfaces:
+  - VerifyInterfaceUtilization:
+  - VerifyInterfaceErrors:
+  # - VerifyInterfaceDiscards:
+  - VerifyInterfaceErrDisabled:
+  - VerifyPortChannels:
+
+anta.tests.connectivity:
+  - VerifyReachability:
+      hosts:
+        - source: Management0
+          destination: 8.8.8.8
+          vrf: MGMT
+        - source: Management0
+          destination: 208.67.222.222
+          vrf: MGMT
+
+##################################################
+#    BACKBONE-M11-CR1
+##################################################
+  - VerifyLLDPNeighbors:
+      neighbors:
+        - port: Ethernet1/1
+          neighbor_device: BACKBONE-M11-BL1.demo.com
+          neighbor_port: Ethernet49/1
+        - port: Ethernet2/1
+          neighbor_device: BACKBONE-M12-BL1.demo.com
+          neighbor_port: Ethernet49/1
+        - port: Ethernet27/1
+          neighbor_device: BACKBONE-M11-AR1.demo.com
+          neighbor_port: Ethernet49/1
+        - port: Ethernet28/1
+          neighbor_device: BACKBONE-M12-AR1.demo.com
+          neighbor_port: Ethernet49/1
+        - port: Ethernet29/1
+          neighbor_device: BACKBONE-M13-AR1.demo.com
+          neighbor_port: Ethernet49/1
+        - port: Ethernet30/1
+          neighbor_device: BACKBONE-M14-AR1.demo.com
+          neighbor_port: Ethernet49/1
+      filters:
+        tags: ['BACKBONE-M11-CR1']
+
+##################################################
+#    BACKBONE-M12-CR1
+##################################################
+  - VerifyLLDPNeighbors:
+      neighbors:
+        - port: Ethernet1/1
+          neighbor_device: BACKBONE-M11-BL1.demo.com
+          neighbor_port: Ethernet50/1
+        - port: Ethernet2/1
+          neighbor_device: BACKBONE-M12-BL1.demo.com
+          neighbor_port: Ethernet50/1
+        - port: Ethernet27/1
+          neighbor_device: BACKBONE-M11-AR1.demo.com
+          neighbor_port: Ethernet50/1
+        - port: Ethernet28/1
+          neighbor_device: BACKBONE-M12-AR1.demo.com
+          neighbor_port: Ethernet50/1
+        - port: Ethernet29/1
+          neighbor_device: BACKBONE-M13-AR1.demo.com
+          neighbor_port: Ethernet50/1
+        - port: Ethernet30/1
+          neighbor_device: BACKBONE-M14-AR1.demo.com
+          neighbor_port: Ethernet50/1
+      filters:
+        tags: ['BACKBONE-M12-CR1']
+
+##################################################
+#    BACKBONE-M11-AR1
+##################################################
+  - VerifyLLDPNeighbors:
+      neighbors:
+        - port: Ethernet1
+          neighbor_device: ENGINEERING-BDF-DS1.demo.com
+          neighbor_port: Ethernet48
+        - port: Ethernet49/1
+          neighbor_device: BACKBONE-M11-CR1.demo.com
+          neighbor_port: Ethernet27/1
+        - port: Ethernet50/1
+          neighbor_device: BACKBONE-M12-CR1.demo.com
+          neighbor_port: Ethernet27/1
+      filters:
+        tags: ['BACKBONE-M11-AR1']
+
+##################################################
+#    BACKBONE-M12-AR1
+##################################################
+  - VerifyLLDPNeighbors:
+      neighbors:
+        - port: Ethernet1
+          neighbor_device: ENGINEERING-BDF-DS2.demo.com
+          neighbor_port: Ethernet48
+        - port: Ethernet49/1
+          neighbor_device: BACKBONE-M11-CR1.demo.com
+          neighbor_port: Ethernet28/1
+        - port: Ethernet50/1
+          neighbor_device: BACKBONE-M12-CR1.demo.com
+          neighbor_port: Ethernet28/1
+      filters:
+        tags: ['BACKBONE-M12-AR1']
+
+##################################################
+#    BACKBONE-M13-AR1
+##################################################
+  - VerifyLLDPNeighbors:
+      neighbors:
+        - port: Ethernet49/1
+          neighbor_device: BACKBONE-M11-CR1.demo.com
+          neighbor_port: Ethernet29/1
+        - port: Ethernet50/1
+          neighbor_device: BACKBONE-M12-CR1.demo.com
+          neighbor_port: Ethernet29/1
+      filters:
+        tags: ['BACKBONE-M13-AR1']
+
+##################################################
+#    BACKBONE-M14-AR1
+##################################################
+  - VerifyLLDPNeighbors:
+      neighbors:
+        - port: Ethernet49/1
+          neighbor_device: BACKBONE-M11-CR1.demo.com
+          neighbor_port: Ethernet30/1
+        - port: Ethernet50/1
+          neighbor_device: BACKBONE-M12-CR1.demo.com
+          neighbor_port: Ethernet30/1
+      filters:
+        tags: ['BACKBONE-M14-AR1']
+
+##################################################
+#    BACKBONE-M11-BL1
+##################################################
+  - VerifyLLDPNeighbors:
+      neighbors:
+        - port: Ethernet49/1
+          neighbor_device: BACKBONE-M11-CR1.demo.com
+          neighbor_port: Ethernet1/1
+        - port: Ethernet50/1
+          neighbor_device: BACKBONE-M12-CR1.demo.com
+          neighbor_port: Ethernet1/1
+        - port: Ethernet55/1
+          neighbor_device: BACKBONE-M12-BL1.demo.com
+          neighbor_port: Ethernet55/1
+        - port: Ethernet56/1
+          neighbor_device: BACKBONE-M12-BL1.demo.com
+          neighbor_port: Ethernet56/1
+      filters:
+        tags: ['BACKBONE-M11-BL1']
+
+##################################################
+#    BACKBONE-M12-BL1
+##################################################
+  - VerifyLLDPNeighbors:
+      neighbors:
+        - port: Ethernet49/1
+          neighbor_device: BACKBONE-M11-CR1.demo.com
+          neighbor_port: Ethernet2/1
+        - port: Ethernet50/1
+          neighbor_device: BACKBONE-M12-CR1.demo.com
+          neighbor_port: Ethernet2/1
+        - port: Ethernet55/1
+          neighbor_device: BACKBONE-M11-BL1.demo.com
+          neighbor_port: Ethernet55/1
+        - port: Ethernet56/1
+          neighbor_device: BACKBONE-M11-BL1.demo.com
+          neighbor_port: Ethernet56/1
+      filters:
+        tags: ['BACKBONE-M12-BL1']
+
+##################################################
+#    ENGINEERING-BDF-DS1
+##################################################
+  - VerifyLLDPNeighbors:
+      neighbors:
+        - port: Ethernet1
+          neighbor_device: ENGINEERING-TX1-ES1.demo.com
+          neighbor_port: Ethernet49
+        - port: Ethernet2
+          neighbor_device: ENGINEERING-TX1-ES2.demo.com
+          neighbor_port: Ethernet49
+        - port: Ethernet48
+          neighbor_device: BACKBONE-M11-AR1.demo.com
+          neighbor_port: Ethernet1
+        - port: Ethernet55/1
+          neighbor_device: ENGINEERING-BDF-DS2.demo.com
+          neighbor_port: Ethernet55/1
+        - port: Ethernet56/1
+          neighbor_device: ENGINEERING-BDF-DS2.demo.com
+          neighbor_port: Ethernet56/1
+      filters:
+        tags: ['ENGINEERING-BDF-DS1']
+
+##################################################
+#    ENGINEERING-BDF-DS2
+##################################################
+  - VerifyLLDPNeighbors:
+      neighbors:
+        - port: Ethernet1
+          neighbor_device: ENGINEERING-TX1-ES1.demo.com
+          neighbor_port: Ethernet50
+        - port: Ethernet2
+          neighbor_device: ENGINEERING-TX1-ES2.demo.com
+          neighbor_port: Ethernet50
+        - port: Ethernet48
+          neighbor_device: BACKBONE-M12-AR1.demo.com
+          neighbor_port: Ethernet1
+        - port: Ethernet55/1
+          neighbor_device: ENGINEERING-BDF-DS1.demo.com
+          neighbor_port: Ethernet55/1
+        - port: Ethernet56/1
+          neighbor_device: ENGINEERING-BDF-DS1.demo.com
+          neighbor_port: Ethernet56/1
+      filters:
+        tags: ['ENGINEERING-BDF-DS2']
+
+##################################################
+#    ENGINEERING-TX1-ES1
+##################################################
+  - VerifyLLDPNeighbors:
+      neighbors:
+        - port: Ethernet49
+          neighbor_device: ENGINEERING-BDF-DS1.demo.com
+          neighbor_port: Ethernet1
+        - port: Ethernet50
+          neighbor_device: ENGINEERING-BDF-DS2.demo.com
+          neighbor_port: Ethernet1
+      filters:
+        tags: ['ENGINEERING-TX1-ES1']
+
+##################################################
+#    ENGINEERING-TX1-ES2
+##################################################
+  - VerifyLLDPNeighbors:
+      neighbors:
+        - port: Ethernet49
+          neighbor_device: ENGINEERING-BDF-DS1.demo.com
+          neighbor_port: Ethernet2
+        - port: Ethernet50
+          neighbor_device: ENGINEERING-BDF-DS2.demo.com
+          neighbor_port: Ethernet2
+      filters:
+        tags: ['ENGINEERING-TX1-ES2']

@@ -1,0 +1,60 @@
+anta_inventory:
+
+# ANTA inventory for FINANCE
+##################################################
+#       FINANCE
+##################################################
+
+  hosts:
+
+#########################################
+#            L3_LEAFs / VTEPs           #
+#########################################
+  - host: 10.44.10.120
+    name: FINANCE-MDF-DS1
+    tags: ['FINANCE-MDF-DS1', 'l3_leafs', 'mlag', 'FINANCE', 'FINANCE-l3_leafs']
+#    disable_cache: true
+  - host: 10.44.10.121
+    name: FINANCE-MDF-DS2
+    tags: ['FINANCE-MDF-DS2', 'l3_leafs', 'mlag', 'FINANCE', 'FINANCE-l3_leafs']
+#    disable_cache: true
+
+#########################################
+#           MLAGed  L2_LEAFs            #
+#########################################
+#   - host: 10.44.10.30
+#     name: FINANCE-I01-ES1
+#     tags: ['FINANCE-I01-ES1', 'leafs', 'mlag', 'FINANCE', 'FINANCE-leafs']
+# #    disable_cache: true
+#   - host: 10.44.10.31
+#     name: FINANCE-I01-ES2
+#     tags: ['FINANCE-I01-ES2', 'leafs', 'mlag', 'FINANCE', 'FINANCE-leafs']
+# #    disable_cache: true
+#   - host: 10.44.10.30
+#     name: FINANCE-I02-ES1
+#     tags: ['FINANCE-I02-ES1', 'leafs', 'mlag', 'FINANCE', 'FINANCE-leafs']
+# #    disable_cache: true
+#   - host: 10.44.10.31
+#     name: FINANCE-I02-ES2
+#     tags: ['FINANCE-I02-ES2', 'leafs', 'mlag', 'FINANCE', 'FINANCE-leafs']
+# #    disable_cache: true
+
+#########################################
+#          non-MLAG L2_LEAFs            #
+#########################################
+  - host: 10.44.10.126
+    name: FINANCE-TX1-ES3
+    tags: ['FINANCE-I01-ES3', 'leafs', 'FINANCE', 'FINANCE-leafs']
+#    disable_cache: true
+  - host: 10.44.10.126
+    name: FINANCE-TX1-ES4
+    tags: ['FINANCE-I01-ES4', 'leafs', 'FINANCE', 'FINANCE-leafs']
+#    disable_cache: true
+  - host: 10.44.10.126
+    name: FINANCE-TX2-ES3
+    tags: ['FINANCE-I02-ES3', 'leafs', 'FINANCE', 'FINANCE-leafs']
+#    disable_cache: true
+  - host: 10.44.10.126
+    name: FINANCE-TX2-ES4
+    tags: ['FINANCE-I02-ES4', 'leafs', 'FINANCE', 'FINANCE-leafs']
+#    disable_cache: true

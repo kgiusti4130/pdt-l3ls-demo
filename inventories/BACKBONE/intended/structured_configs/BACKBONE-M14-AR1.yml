@@ -1,0 +1,251 @@
+hostname: BACKBONE-M14-AR1
+is_deployed: false
+router_bgp:
+  as: '65000.12'
+  router_id: 10.252.0.12
+  bgp:
+    default:
+      ipv4_unicast: false
+  maximum_paths:
+    paths: 4
+    ecmp: 4
+  redistribute:
+    connected:
+      enabled: true
+      route_map: RM-CONN-2-BGP
+  peer_groups:
+  - name: IPv4-UNDERLAY-PEERS
+    type: ipv4
+    password: 7x4B4rnJhZB438m9+BrBfQ==
+    maximum_routes: 12000
+    send_community: all
+  address_family_ipv4:
+    peer_groups:
+    - name: IPv4-UNDERLAY-PEERS
+      activate: true
+  neighbors:
+  - ip_address: 10.252.0.76
+    peer_group: IPv4-UNDERLAY-PEERS
+    remote_as: '65000.1'
+    peer: BACKBONE-M11-CR1
+    description: BACKBONE-M11-CR1_Ethernet30/1
+  - ip_address: 10.252.0.78
+    peer_group: IPv4-UNDERLAY-PEERS
+    remote_as: '65000.1'
+    peer: BACKBONE-M12-CR1
+    description: BACKBONE-M12-CR1_Ethernet30/1
+  as_notation: asdot
+  distance:
+    external_routes: 20
+    internal_routes: 200
+    local_routes: 200
+  graceful_restart:
+    enabled: true
+    restart_time: 300
+static_routes:
+- vrf: MGMT
+  destination_address_prefix: 0.0.0.0/0
+  gateway: 172.16.1.1
+service_routing_protocols_model: multi-agent
+ip_routing: true
+router_multicast:
+  ipv4:
+    routing: true
+vlan_internal_order:
+  allocation: ascending
+  range:
+    beginning: 1006
+    ending: 1199
+aaa_root:
+  disabled: true
+config_end: true
+enable_password:
+  disabled: true
+transceiver_qsfp_default_mode_4x10: true
+interface_defaults:
+  mtu: 1500
+spanning_tree:
+  mode: none
+local_users:
+- name: keeper
+  privilege: 15
+  role: network-admin
+  sha512_password: <password>
+- name: networking_user
+  privilege: 15
+  role: network-admin
+  sha512_password: <password>
+- name: test
+  privilege: 15
+  role: network-admin
+  sha512_password: $6$4UgGZHNA/O5uJM3r$91rzQE6bTdO/ZoLgCkCmTsq6HBoPGjWnYIvwL7nVVavwzteS67lKi6gB6rSkHfuNFKT.Jbsqp0biF4TALUnn61
+vrfs:
+- name: MGMT
+  ip_routing: false
+- name: campus
+  ip_routing: true
+management_interfaces:
+- name: Management0
+  description: OOB_MANAGEMENT
+  shutdown: false
+  vrf: MGMT
+  ip_address: 172.16.1.24/24
+  gateway: 172.16.1.1
+  type: oob
+  lldp:
+    transmit: false
+    receive: false
+mac_address_table:
+  aging_time: 1800
+management_api_http:
+  enable_vrfs:
+  - name: MGMT
+    access_group: MGMT_V4_EAPI
+  - name: default
+    access_group: MGMT_V4_EAPI
+  - name: campus
+    access_group: MGMT_V4_EAPI
+  enable_https: true
+  enable_http: false
+  default_services: true
+snmp_server:
+  engine_ids:
+    local: 3d0fda0cef95586e54f292db9a21a847dc211280
+  contact: Network Engineering // 281.330.8004
+  location: BACKBONE_FABRIC BACKBONE BACKBONE-M14-AR1
+  users:
+  - name: demoV3
+    group: DEMO_RO
+    version: v3
+    localized: 3d0fda0cef95586e54f292db9a21a847dc211280
+    auth: sha
+    auth_passphrase: df299f40dd6c53d2dade2e56b8486b33f671c034
+    priv: aes
+    priv_passphrase: df299f40dd6c53d2dade2e56b8486b33
+  - name: demoRW
+    group: DEMO_RW
+    version: v3
+    localized: 3d0fda0cef95586e54f292db9a21a847dc211280
+    auth: sha
+    auth_passphrase: df299f40dd6c53d2dade2e56b8486b33f671c034
+    priv: aes
+    priv_passphrase: df299f40dd6c53d2dade2e56b8486b33
+  ipv4_acls:
+  - name: MGMT_V4_SNMP
+    vrf: default
+  - name: MGMT_V4_SNMP
+    vrf: MGMT
+  - name: MGMT_V4_SNMP
+    vrf: campus
+  views:
+  - name: DEMO_VIEW_ALL
+    mib_family_name: iso
+    included: true
+  groups:
+  - name: DEMO_RO
+    version: v3
+    authentication: priv
+    read: DEMO_VIEW_ALL
+  - name: DEMO_RW
+    version: v3
+    authentication: priv
+    write: DEMO_VIEW_ALL
+  local_interfaces:
+  - name: Vlan4092
+    vrf: campus
+  vrfs:
+  - name: campus
+    enable: true
+ethernet_interfaces:
+- name: Ethernet49/1
+  peer: BACKBONE-M11-CR1
+  peer_interface: Ethernet30/1
+  peer_type: super-spine
+  description: P2P_BACKBONE-M11-CR1_Ethernet30/1
+  shutdown: false
+  mtu: 9214
+  switchport:
+    enabled: false
+  ip_address: 10.252.0.77/31
+  pim:
+    ipv4:
+      sparse_mode: true
+- name: Ethernet50/1
+  peer: BACKBONE-M12-CR1
+  peer_interface: Ethernet30/1
+  peer_type: super-spine
+  description: P2P_BACKBONE-M12-CR1_Ethernet30/1
+  shutdown: false
+  mtu: 9214
+  switchport:
+    enabled: false
+  ip_address: 10.252.0.79/31
+  pim:
+    ipv4:
+      sparse_mode: true
+loopback_interfaces:
+- name: Loopback0
+  description: ROUTER_ID
+  shutdown: false
+  ip_address: 10.252.0.12/32
+- name: Loopback2
+  description: SFLOW SOURCE
+  shutdown: false
+  ip_address: 10.255.1.10/32
+prefix_lists:
+- name: PL-LOOPBACKS-EVPN-OVERLAY
+  sequence_numbers:
+  - sequence: 10
+    action: permit 10.252.0.8/29 eq 32
+route_maps:
+- name: RM-CONN-2-BGP
+  sequence_numbers:
+  - sequence: 10
+    type: permit
+    match:
+    - ip address prefix-list PL-LOOPBACKS-EVPN-OVERLAY
+metadata:
+  platform: cEOS-lab
+ip_access_lists:
+- name: MGMT_V4_EAPI
+  counters_per_entry: true
+  entries:
+  - sequence: 10
+    action: permit
+    protocol: ip
+    destination: any
+    source: 172.16.1.0/24
+  - sequence: 65000
+    action: deny
+    protocol: ip
+    destination: any
+    source: any
+    log: true
+- name: MGMT_V4_SNMP
+  counters_per_entry: true
+  entries:
+  - sequence: 10
+    action: permit
+    protocol: ip
+    destination: any
+    source: 172.16.1.0/24
+  - sequence: 65000
+    action: deny
+    protocol: ip
+    destination: any
+    source: any
+    log: true
+- name: MGMT_V4_SSH
+  counters_per_entry: true
+  entries:
+  - sequence: 10
+    action: permit
+    protocol: ip
+    destination: any
+    source: 172.16.1.0/24
+  - sequence: 65000
+    action: deny
+    protocol: ip
+    destination: any
+    source: any
+    log: true

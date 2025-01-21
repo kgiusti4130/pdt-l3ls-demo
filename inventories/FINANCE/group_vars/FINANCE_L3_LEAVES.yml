@@ -1,0 +1,19 @@
+---
+# L3 Leaf config for FINANCE
+type: l3leaf
+
+monitor_connectivity:
+  shutdown: true
+  interval: 5
+  hosts:
+    - name: AWS-East-1
+      ip: 50.17.255.254
+    - name: Google
+      ip: 8.8.8.8
+      url: http://www.google.com
+    - name: OpenDNS
+      ip: 208.67.222.222
+
+#############################################
+#    Config logic for global & local ACLs   #
+#############################################

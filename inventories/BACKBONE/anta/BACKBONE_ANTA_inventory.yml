@@ -1,0 +1,72 @@
+anta_inventory:
+
+# ANTA inventory for backbone
+##################################################
+#       backbone
+##################################################
+
+  hosts:
+
+#########################################
+#             SUPER SPINES              #
+#########################################
+  - host: 172.16.1.11
+    name: BACKBONE-M11-CR1
+    tags: ['BACKBONE-M11-CR1', 'super_spines', 'backbone']
+#    disable_cache: true
+  - host: 172.16.1.12
+    name: BACKBONE-M12-CR1
+    tags: ['BACKBONE-M12-CR1', 'super_spines', 'backbone']
+#    disable_cache: true
+
+#########################################
+#                SPINES                 #
+#########################################
+  - host: 172.16.1.21
+    name: BACKBONE-M11-AR1
+    tags: ['BACKBONE-M11-AR1', 'spines', 'backbone']
+  #  disable_cache: true
+  - host: 172.16.1.22
+    name: BACKBONE-M12-AR1
+    tags: ['BACKBONE-M12-AR1', 'spines', 'backbone']
+#    disable_cache: true
+  - host: 172.16.1.23
+    name: BACKBONE-M13-AR1
+    tags: ['BACKBONE-M13-AR1', 'spines', 'backbone']
+#    disable_cache: true
+  - host: 172.16.1.24
+    name: BACKBONE-M14-AR1
+    tags: ['BACKBONE-M14-AR1', 'spines', 'backbone']
+#    disable_cache: true
+
+#########################################
+#            L3_LEAFs / VTEPs           #
+#########################################
+  - host: 172.16.1.31
+    name: BACKBONE-M11-BL1
+    tags: ['BACKBONE-M11-BL1', 'l3_leafs', 'mlag', 'backbone', 'backbone_l3_leafs']
+#    disable_cache: true
+  - host: 172.16.1.32
+    name: BACKBONE-M12-BL1
+    tags: ['BACKBONE-M12-BL1', 'l3_leafs', 'mlag', 'backbone', 'backbone_l3_leafs']
+#    disable_cache: true
+
+#############################################
+#        ENGINEERING building switches      #
+#############################################
+  - host: 172.16.1.40
+    name: ENGINEERING-BDF-DS1
+    tags: ['ENGINEERING-BDF-DS1', 'l3_leafs', 'mlag', 'engineering', 'engineering_l3_leafs']
+#    disable_cache: true
+  - host: 172.16.1.41
+    name: ENGINEERING-BDF-DS2
+    tags: ['ENGINEERING-BDF-DS2', 'l3_leafs', 'mlag', 'engineering', 'engineering_l3_leafs']
+#    disable_cache: true
+  - host: 172.16.1.42
+    name: ENGINEERING-TX1-ES1
+    tags: ['ENGINEERING-TX1-ES1', 'l2_leafs', 'engineering', 'engineering_l2_leafs']
+#    disable_cache: true
+  - host: 172.16.1.43
+    name: ENGINEERING-TX1-ES2
+    tags: ['ENGINEERING-TX1-ES2', 'l2_leafs', 'engineering', 'engineering_l2_leafs']
+#    disable_cache: true
