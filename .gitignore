@@ -61,3 +61,6 @@ compliance/
 
 # CLAB files
 clab/
+
+# Exclude output for eos_snapshots
+snapshots/
