@@ -799,7 +799,7 @@ interface defaults
 
 | Interface | Description | Channel Group | IP Address | VRF |  MTU | Shutdown | ACL In | ACL Out |
 | --------- | ----------- | ------------- | ---------- | ----| ---- | -------- | ------ | ------- |
-| Ethernet48 | P2P_BACKBONE-M13-AR1_Ethernet2 | - | 10.252.4.7/31 | default | 9214 | False | - | - |
+| Ethernet48 | P2P_BACKBONE-M13-AR1_Ethernet2 | - | 10.252.4.7/31 | default | 1500 | False | - | - |
 
 #### Ethernet Interfaces Device Configuration
 
@@ -818,7 +818,7 @@ interface Ethernet2
 interface Ethernet48
    description P2P_BACKBONE-M13-AR1_Ethernet2
    no shutdown
-   mtu 9214
+   mtu 1500
    no switchport
    ip address 10.252.4.7/31
    pim ipv4 sparse-mode
@@ -930,10 +930,10 @@ interface Loopback10
 | --------- | ----------- | --- | ---- | -------- |
 | Vlan32 | FINANCE_end-user | campus | - | False |
 | Vlan132 | FINANCE_VOICE | campus | - | False |
-| Vlan3009 | MLAG_L3_VRF_campus | campus | 9214 | False |
+| Vlan3009 | MLAG_L3_VRF_campus | campus | 1500 | False |
 | Vlan4092 | Inband Management | default | 1500 | False |
-| Vlan4093 | MLAG_L3 | default | 9214 | False |
-| Vlan4094 | MLAG | default | 9214 | False |
+| Vlan4093 | MLAG_L3 | default | 1500 | False |
+| Vlan4094 | MLAG | default | 1500 | False |
 
 ##### IPv4
 
@@ -973,7 +973,7 @@ interface Vlan132
 interface Vlan3009
    description MLAG_L3_VRF_campus
    no shutdown
-   mtu 9214
+   mtu 1500
    vrf campus
    ip address 10.252.9.3/31
 !
@@ -988,14 +988,14 @@ interface Vlan4092
 interface Vlan4093
    description MLAG_L3
    no shutdown
-   mtu 9214
+   mtu 1500
    ip address 10.252.9.3/31
    pim ipv4 sparse-mode
 !
 interface Vlan4094
    description MLAG
    no shutdown
-   mtu 9214
+   mtu 1500
    no autostate
    ip address 10.252.9.1/31
 ```

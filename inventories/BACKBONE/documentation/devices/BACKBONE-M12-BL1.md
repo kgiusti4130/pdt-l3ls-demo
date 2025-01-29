@@ -812,8 +812,8 @@ interface defaults
 | --------- | ----------- | ------------- | ---------- | ----| ---- | -------- | ------ | ------- |
 | Ethernet47 | P2P_CORE-LEGACY_Te1/1/2 | - | 10.252.6.5/31 | campus | 1500 | False | - | - |
 | Ethernet48 | P2P_CORE-LEGACY_Te2/1/2 | - | 10.252.6.7/31 | campus | 1500 | False | - | - |
-| Ethernet49/1 | P2P_BACKBONE-M11-CR1_Ethernet2/1 | - | 10.252.1.5/31 | default | 9214 | False | - | - |
-| Ethernet50/1 | P2P_BACKBONE-M12-CR1_Ethernet2/1 | - | 10.252.1.7/31 | default | 9214 | False | - | - |
+| Ethernet49/1 | P2P_BACKBONE-M11-CR1_Ethernet2/1 | - | 10.252.1.5/31 | default | 1500 | False | - | - |
+| Ethernet50/1 | P2P_BACKBONE-M12-CR1_Ethernet2/1 | - | 10.252.1.7/31 | default | 1500 | False | - | - |
 
 #### Ethernet Interfaces Device Configuration
 
@@ -854,7 +854,7 @@ interface Ethernet48
 interface Ethernet49/1
    description P2P_BACKBONE-M11-CR1_Ethernet2/1
    no shutdown
-   mtu 9214
+   mtu 1500
    no switchport
    ip address 10.252.1.5/31
    pim ipv4 sparse-mode
@@ -862,7 +862,7 @@ interface Ethernet49/1
 interface Ethernet50/1
    description P2P_BACKBONE-M12-CR1_Ethernet2/1
    no shutdown
-   mtu 9214
+   mtu 1500
    no switchport
    ip address 10.252.1.7/31
    pim ipv4 sparse-mode
@@ -985,11 +985,11 @@ interface Loopback11
 | Vlan22 | ENGINEERING_end-user | campus | - | False |
 | Vlan122 | ENGINEERING_VOICE | campus | - | False |
 | Vlan333 | IOT | IOT | - | False |
-| Vlan3009 | MLAG_L3_VRF_campus | campus | 9214 | False |
-| Vlan3010 | MLAG_L3_VRF_IOT | IOT | 9214 | False |
+| Vlan3009 | MLAG_L3_VRF_campus | campus | 1500 | False |
+| Vlan3010 | MLAG_L3_VRF_IOT | IOT | 1500 | False |
 | Vlan4092 | BORDER-LEAFS | IOT | - | True |
-| Vlan4093 | MLAG_L3 | default | 9214 | False |
-| Vlan4094 | MLAG | default | 9214 | False |
+| Vlan4093 | MLAG_L3 | default | 1500 | False |
+| Vlan4094 | MLAG | default | 1500 | False |
 
 ##### IPv4
 
@@ -1039,14 +1039,14 @@ interface Vlan333
 interface Vlan3009
    description MLAG_L3_VRF_campus
    no shutdown
-   mtu 9214
+   mtu 1500
    vrf campus
    ip address 10.252.2.3/31
 !
 interface Vlan3010
    description MLAG_L3_VRF_IOT
    no shutdown
-   mtu 9214
+   mtu 1500
    vrf IOT
    ip address 10.252.2.3/31
 !
@@ -1060,14 +1060,14 @@ interface Vlan4092
 interface Vlan4093
    description MLAG_L3
    no shutdown
-   mtu 9214
+   mtu 1500
    ip address 10.252.2.3/31
    pim ipv4 sparse-mode
 !
 interface Vlan4094
    description MLAG
    no shutdown
-   mtu 9214
+   mtu 1500
    no autostate
    ip address 10.252.2.1/31
 ```

@@ -363,7 +363,7 @@ vlan_interfaces:
 - name: Vlan4093
   description: MLAG_L3
   shutdown: false
-  mtu: 9214
+  mtu: 1500
   ip_address: 10.252.2.3/31
   pim:
     ipv4:
@@ -372,7 +372,7 @@ vlan_interfaces:
   description: MLAG
   shutdown: false
   no_autostate: true
-  mtu: 9214
+  mtu: 1500
   ip_address: 10.252.2.1/31
 - name: Vlan22
   tenant: TENANT1
@@ -410,7 +410,7 @@ vlan_interfaces:
   shutdown: false
   description: MLAG_L3_VRF_campus
   vrf: campus
-  mtu: 9214
+  mtu: 1500
   ip_address: 10.252.2.3/31
 - name: Vlan333
   tenant: TENANT1
@@ -441,7 +441,7 @@ vlan_interfaces:
   shutdown: false
   description: MLAG_L3_VRF_IOT
   vrf: IOT
-  mtu: 9214
+  mtu: 1500
   ip_address: 10.252.2.3/31
 port_channel_interfaces:
 - name: Port-Channel551
@@ -496,7 +496,7 @@ ethernet_interfaces:
   peer_type: super-spine
   description: P2P_BACKBONE-M11-CR1_Ethernet2/1
   shutdown: false
-  mtu: 9214
+  mtu: 1500
   switchport:
     enabled: false
   ip_address: 10.252.1.5/31
@@ -509,7 +509,7 @@ ethernet_interfaces:
   peer_type: super-spine
   description: P2P_BACKBONE-M12-CR1_Ethernet2/1
   shutdown: false
-  mtu: 9214
+  mtu: 1500
   switchport:
     enabled: false
   ip_address: 10.252.1.7/31

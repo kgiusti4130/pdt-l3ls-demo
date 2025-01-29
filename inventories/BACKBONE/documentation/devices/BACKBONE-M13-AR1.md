@@ -715,10 +715,10 @@ interface defaults
 
 | Interface | Description | Channel Group | IP Address | VRF |  MTU | Shutdown | ACL In | ACL Out |
 | --------- | ----------- | ------------- | ---------- | ----| ---- | -------- | ------ | ------- |
-| Ethernet2 | P2P_FINANCE-BDF-DS2_Ethernet48 | - | 10.252.4.6/31 | default | 9214 | False | - | - |
-| Ethernet3 | P2P_MARKETING-BDF-DS2_Ethernet48 | - | 10.252.4.10/31 | default | 9214 | False | - | - |
-| Ethernet49/1 | P2P_BACKBONE-M11-CR1_Ethernet29/1 | - | 10.252.0.73/31 | default | 9214 | False | - | - |
-| Ethernet50/1 | P2P_BACKBONE-M12-CR1_Ethernet29/1 | - | 10.252.0.75/31 | default | 9214 | False | - | - |
+| Ethernet2 | P2P_FINANCE-BDF-DS2_Ethernet48 | - | 10.252.4.6/31 | default | 1500 | False | - | - |
+| Ethernet3 | P2P_MARKETING-BDF-DS2_Ethernet48 | - | 10.252.4.10/31 | default | 1500 | False | - | - |
+| Ethernet49/1 | P2P_BACKBONE-M11-CR1_Ethernet29/1 | - | 10.252.0.73/31 | default | 1500 | False | - | - |
+| Ethernet50/1 | P2P_BACKBONE-M12-CR1_Ethernet29/1 | - | 10.252.0.75/31 | default | 1500 | False | - | - |
 
 #### Ethernet Interfaces Device Configuration
 
@@ -727,7 +727,7 @@ interface defaults
 interface Ethernet2
    description P2P_FINANCE-BDF-DS2_Ethernet48
    no shutdown
-   mtu 9214
+   mtu 1500
    no switchport
    ip address 10.252.4.6/31
    pim ipv4 sparse-mode
@@ -735,7 +735,7 @@ interface Ethernet2
 interface Ethernet3
    description P2P_MARKETING-BDF-DS2_Ethernet48
    no shutdown
-   mtu 9214
+   mtu 1500
    no switchport
    ip address 10.252.4.10/31
    pim ipv4 sparse-mode
@@ -743,7 +743,7 @@ interface Ethernet3
 interface Ethernet49/1
    description P2P_BACKBONE-M11-CR1_Ethernet29/1
    no shutdown
-   mtu 9214
+   mtu 1500
    no switchport
    ip address 10.252.0.73/31
    pim ipv4 sparse-mode
@@ -751,7 +751,7 @@ interface Ethernet49/1
 interface Ethernet50/1
    description P2P_BACKBONE-M12-CR1_Ethernet29/1
    no shutdown
-   mtu 9214
+   mtu 1500
    no switchport
    ip address 10.252.0.75/31
    pim ipv4 sparse-mode

@@ -163,7 +163,7 @@ ethernet_interfaces:
   peer_type: super-spine
   description: P2P_BACKBONE-M11-CR1_Ethernet30/1
   shutdown: false
-  mtu: 9214
+  mtu: 1500
   switchport:
     enabled: false
   ip_address: 10.252.0.77/31
@@ -176,7 +176,7 @@ ethernet_interfaces:
   peer_type: super-spine
   description: P2P_BACKBONE-M12-CR1_Ethernet30/1
   shutdown: false
-  mtu: 9214
+  mtu: 1500
   switchport:
     enabled: false
   ip_address: 10.252.0.79/31

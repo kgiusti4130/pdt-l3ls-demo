@@ -218,7 +218,7 @@ ethernet_interfaces:
   peer_type: l3leaf
   description: P2P_BACKBONE-M11-BL1_Ethernet49/1
   shutdown: false
-  mtu: 9214
+  mtu: 1500
   switchport:
     enabled: false
   ip_address: 10.252.1.0/31
@@ -231,7 +231,7 @@ ethernet_interfaces:
   peer_type: l3leaf
   description: P2P_BACKBONE-M12-BL1_Ethernet49/1
   shutdown: false
-  mtu: 9214
+  mtu: 1500
   switchport:
     enabled: false
   ip_address: 10.252.1.4/31
@@ -244,7 +244,7 @@ ethernet_interfaces:
   peer_type: spine
   description: P2P_BACKBONE-M11-AR1_Ethernet49/1
   shutdown: false
-  mtu: 9214
+  mtu: 1500
   switchport:
     enabled: false
   ip_address: 10.252.0.64/31
@@ -257,7 +257,7 @@ ethernet_interfaces:
   peer_type: spine
   description: P2P_BACKBONE-M12-AR1_Ethernet49/1
   shutdown: false
-  mtu: 9214
+  mtu: 1500
   switchport:
     enabled: false
   ip_address: 10.252.0.68/31
@@ -270,7 +270,7 @@ ethernet_interfaces:
   peer_type: spine
   description: P2P_BACKBONE-M13-AR1_Ethernet49/1
   shutdown: false
-  mtu: 9214
+  mtu: 1500
   switchport:
     enabled: false
   ip_address: 10.252.0.72/31
@@ -283,7 +283,7 @@ ethernet_interfaces:
   peer_type: spine
   description: P2P_BACKBONE-M14-AR1_Ethernet49/1
   shutdown: false
-  mtu: 9214
+  mtu: 1500
   switchport:
     enabled: false
   ip_address: 10.252.0.76/31

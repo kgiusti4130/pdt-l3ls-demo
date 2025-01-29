@@ -715,8 +715,8 @@ interface defaults
 
 | Interface | Description | Channel Group | IP Address | VRF |  MTU | Shutdown | ACL In | ACL Out |
 | --------- | ----------- | ------------- | ---------- | ----| ---- | -------- | ------ | ------- |
-| Ethernet49/1 | P2P_BACKBONE-M11-CR1_Ethernet30/1 | - | 10.252.0.77/31 | default | 9214 | False | - | - |
-| Ethernet50/1 | P2P_BACKBONE-M12-CR1_Ethernet30/1 | - | 10.252.0.79/31 | default | 9214 | False | - | - |
+| Ethernet49/1 | P2P_BACKBONE-M11-CR1_Ethernet30/1 | - | 10.252.0.77/31 | default | 1500 | False | - | - |
+| Ethernet50/1 | P2P_BACKBONE-M12-CR1_Ethernet30/1 | - | 10.252.0.79/31 | default | 1500 | False | - | - |
 
 #### Ethernet Interfaces Device Configuration
 
@@ -725,7 +725,7 @@ interface defaults
 interface Ethernet49/1
    description P2P_BACKBONE-M11-CR1_Ethernet30/1
    no shutdown
-   mtu 9214
+   mtu 1500
    no switchport
    ip address 10.252.0.77/31
    pim ipv4 sparse-mode
@@ -733,7 +733,7 @@ interface Ethernet49/1
 interface Ethernet50/1
    description P2P_BACKBONE-M12-CR1_Ethernet30/1
    no shutdown
-   mtu 9214
+   mtu 1500
    no switchport
    ip address 10.252.0.79/31
    pim ipv4 sparse-mode

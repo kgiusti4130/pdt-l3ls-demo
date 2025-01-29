@@ -677,12 +677,12 @@ interface defaults
 
 | Interface | Description | Channel Group | IP Address | VRF |  MTU | Shutdown | ACL In | ACL Out |
 | --------- | ----------- | ------------- | ---------- | ----| ---- | -------- | ------ | ------- |
-| Ethernet1/1 | P2P_BACKBONE-M11-BL1_Ethernet49/1 | - | 10.252.1.0/31 | default | 9214 | False | - | - |
-| Ethernet2/1 | P2P_BACKBONE-M12-BL1_Ethernet49/1 | - | 10.252.1.4/31 | default | 9214 | False | - | - |
-| Ethernet27/1 | P2P_BACKBONE-M11-AR1_Ethernet49/1 | - | 10.252.0.64/31 | default | 9214 | False | - | - |
-| Ethernet28/1 | P2P_BACKBONE-M12-AR1_Ethernet49/1 | - | 10.252.0.68/31 | default | 9214 | False | - | - |
-| Ethernet29/1 | P2P_BACKBONE-M13-AR1_Ethernet49/1 | - | 10.252.0.72/31 | default | 9214 | False | - | - |
-| Ethernet30/1 | P2P_BACKBONE-M14-AR1_Ethernet49/1 | - | 10.252.0.76/31 | default | 9214 | False | - | - |
+| Ethernet1/1 | P2P_BACKBONE-M11-BL1_Ethernet49/1 | - | 10.252.1.0/31 | default | 1500 | False | - | - |
+| Ethernet2/1 | P2P_BACKBONE-M12-BL1_Ethernet49/1 | - | 10.252.1.4/31 | default | 1500 | False | - | - |
+| Ethernet27/1 | P2P_BACKBONE-M11-AR1_Ethernet49/1 | - | 10.252.0.64/31 | default | 1500 | False | - | - |
+| Ethernet28/1 | P2P_BACKBONE-M12-AR1_Ethernet49/1 | - | 10.252.0.68/31 | default | 1500 | False | - | - |
+| Ethernet29/1 | P2P_BACKBONE-M13-AR1_Ethernet49/1 | - | 10.252.0.72/31 | default | 1500 | False | - | - |
+| Ethernet30/1 | P2P_BACKBONE-M14-AR1_Ethernet49/1 | - | 10.252.0.76/31 | default | 1500 | False | - | - |
 
 #### Ethernet Interfaces Device Configuration
 
@@ -691,7 +691,7 @@ interface defaults
 interface Ethernet1/1
    description P2P_BACKBONE-M11-BL1_Ethernet49/1
    no shutdown
-   mtu 9214
+   mtu 1500
    no switchport
    ip address 10.252.1.0/31
    pim ipv4 sparse-mode
@@ -699,7 +699,7 @@ interface Ethernet1/1
 interface Ethernet2/1
    description P2P_BACKBONE-M12-BL1_Ethernet49/1
    no shutdown
-   mtu 9214
+   mtu 1500
    no switchport
    ip address 10.252.1.4/31
    pim ipv4 sparse-mode
@@ -707,7 +707,7 @@ interface Ethernet2/1
 interface Ethernet27/1
    description P2P_BACKBONE-M11-AR1_Ethernet49/1
    no shutdown
-   mtu 9214
+   mtu 1500
    no switchport
    ip address 10.252.0.64/31
    pim ipv4 sparse-mode
@@ -715,7 +715,7 @@ interface Ethernet27/1
 interface Ethernet28/1
    description P2P_BACKBONE-M12-AR1_Ethernet49/1
    no shutdown
-   mtu 9214
+   mtu 1500
    no switchport
    ip address 10.252.0.68/31
    pim ipv4 sparse-mode
@@ -723,7 +723,7 @@ interface Ethernet28/1
 interface Ethernet29/1
    description P2P_BACKBONE-M13-AR1_Ethernet49/1
    no shutdown
-   mtu 9214
+   mtu 1500
    no switchport
    ip address 10.252.0.72/31
    pim ipv4 sparse-mode
@@ -731,7 +731,7 @@ interface Ethernet29/1
 interface Ethernet30/1
    description P2P_BACKBONE-M14-AR1_Ethernet49/1
    no shutdown
-   mtu 9214
+   mtu 1500
    no switchport
    ip address 10.252.0.76/31
    pim ipv4 sparse-mode

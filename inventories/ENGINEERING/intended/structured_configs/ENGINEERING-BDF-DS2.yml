@@ -336,7 +336,7 @@ vlan_interfaces:
 - name: Vlan4093
   description: MLAG_L3
   shutdown: false
-  mtu: 9214
+  mtu: 1500
   ip_address: 10.252.8.3/31
   pim:
     ipv4:
@@ -345,7 +345,7 @@ vlan_interfaces:
   description: MLAG
   shutdown: false
   no_autostate: true
-  mtu: 9214
+  mtu: 1500
   ip_address: 10.252.8.1/31
 - name: Vlan22
   tenant: TENANT1
@@ -383,7 +383,7 @@ vlan_interfaces:
   shutdown: false
   description: MLAG_L3_VRF_campus
   vrf: campus
-  mtu: 9214
+  mtu: 1500
   ip_address: 10.252.8.3/31
 - name: Vlan333
   tenant: TENANT1
@@ -403,7 +403,7 @@ vlan_interfaces:
   shutdown: false
   description: MLAG_L3_VRF_IOT
   vrf: IOT
-  mtu: 9214
+  mtu: 1500
   ip_address: 10.252.8.3/31
 - name: Vlan4092
   description: Inband Management
@@ -487,7 +487,7 @@ ethernet_interfaces:
   switchport:
     enabled: false
   shutdown: false
-  mtu: 9214
+  mtu: 1500
   ip_address: 10.252.4.3/31
   pim:
     ipv4:
