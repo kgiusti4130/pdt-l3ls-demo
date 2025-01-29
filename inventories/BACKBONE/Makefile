@@ -32,4 +32,4 @@ facts: ## Get facts from devices
 
 .PHONY: snapshot
 snapshot: ## Take snapshot of fabric
-	ansible-playbook playbooks/eos_snapshot.yml	
+	ansible-playbook playbooks/eos_snapshot.yml
