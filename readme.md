@@ -36,3 +36,17 @@ ContainerLAB topology located here in **/workspace/inventories/BACKBONE/clab/BAC
 1. Enter info into ***sites.csv*** and run make build.
 2. Add new site DS switch layer 3 leafs Loopback0 overlay interface to **BACKBONE/group_vars/BACKBONE.yml** **evpn_gateay** key.
 3. Add new site to global_vars **DEMO_GLOBAL.yml** **l3_edge** key.
+
+## ANTA example
+
+```sh
+cd /workspace/inventories/BACKBONE/anta
+anta nrfu -u test -p 'test' -i BACKBONE_anta_inventory.yml -c BACKBONE_anta_tests.yml
+```
+
+## ANTA on single device
+
+```sh
+cd /workspace/inventories/BACKBONE/anta
+anta nrfu -u test -p 'test' -i BACKBONE_anta_inventory.yml -c BACKBONE_anta_tests.yml -d BACKBONE-M12-BL1
+```
