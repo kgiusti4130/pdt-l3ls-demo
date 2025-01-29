@@ -7,6 +7,8 @@ custom_structured_configuration_list_merge: append
 
 ansible_connection: ansible.netcommon.httpapi
 ansible_network_os: arista.eos.eos
+ansible_user: test
+ansible_password: test
 ansible_become: true
 ansible_become_method: enable
 ansible_httpapi_use_ssl: true
