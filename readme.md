@@ -50,3 +50,7 @@ anta nrfu -u test -p 'test' -i BACKBONE_anta_inventory.yml -c BACKBONE_anta_test
 cd /workspace/inventories/BACKBONE/anta
 anta nrfu -u test -p 'test' -i BACKBONE_anta_inventory.yml -c BACKBONE_anta_tests.yml -d BACKBONE-M12-BL1
 ```
+
+## Topology diagram
+
+![Lab Diagrams - L3LS - Spine_Leaf](https://github.com/user-attachments/assets/cc85d9af-ef99-48b5-9cac-8868ebfed249)
